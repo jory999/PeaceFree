@@ -60,8 +60,8 @@ void SysMain()
     //DrawRectangle(0,0,320,320,9);
     //DrawRectangle(10,10,100,100,10);
     
-    DrawRectangle(10,150,300,200,1);
-    DrawRectangle(19,170,90,190,10);
+    //DrawRectangle(10,150,300,200,1);
+    //DrawRectangle(19,170,90,190,10);
 
     //PutString(20,160,9,"hello world\0");
 

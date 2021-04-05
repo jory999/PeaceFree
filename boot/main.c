@@ -107,11 +107,11 @@ void SysMain()
 	  PutChar( 120,10, 'd', 1) ; */
     
       
-	  unsigned  char nowput[99]="GOD Will Bless My Family...";
-      PutString(10, 10,1,nowput);
+	  unsigned  char nowput[99]="GOD Will Bless My Family...\0";
+      PutString(10, 10,7,nowput);
 
-	  unsigned  char nowstr[66]="Hello Great World...";
-	  putfonts8_asc(10, 60,1,nowstr);
+	  unsigned  char nowstr[66]="Hello Great World...\0";
+	  putfonts8_asc(10, 60,7,nowstr);
         
     
     //DrawRectangle(0,0,320,320,9);

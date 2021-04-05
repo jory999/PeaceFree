@@ -32,15 +32,17 @@ entry:
 
     movl $0x0820,  %eax
     movl %eax,    %es
-    movb $0,      %ch
-    movb $0,      %dh
-    movb $2,      %cl
- read:
-    movb $0x02,   %ah
-    movb $1,      %al
-    movw $0,      %bx
-    movb $0,      %dl
-    int  $0x13
+    
+    movb    $0,    %ch #柱面0
+    movb    $0,    %dh #磁头0
+    movb    $2,    %cl #扇区2
+ 
+read:
+    movb    $0x02, %ah #读磁盘
+    movb    $1,    %al #读一个扇区
+    movw    $0,    %bx 
+    movb    $0,    %dl #A驱动器
+    int $0x13      #读磁盘 
 
     movl %es,     %eax
     add  $0x0020, %eax

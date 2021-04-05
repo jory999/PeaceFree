@@ -1,6 +1,9 @@
 
-#include "font.h"
+//#include "font.h"
 //#include <stdio.h> 
+extern unsigned char table_rgb[16 * 3];
+extern const char font_code_globalA[16];
+extern const char font_code_global[94][16];
 
 extern void FunctionCli(void);
 extern void FunctionSti(void);
@@ -38,7 +41,7 @@ struct BOOTINFO{
 
 };
 
-//const char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24,0x7e,0x42,0x42,0x42,0xe7,0x00,0x00};
+//static const char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24,0x7e,0x42,0x42,0x42,0xe7,0x00,0x00};
 
 void putfont8( int x, int y, char c, char *font)
 {
@@ -61,6 +64,19 @@ void putfont8( int x, int y, char c, char *font)
 	return;
 }
 
+void putfonts8_asc( int x, int y, char c, unsigned char *s)
+{
+	//int iii=s[0] - 0x21;
+	//putfont8( x, y+10, c, &font_code_global[iii]);
+	//putfont8( x+10, y+10, c, &font_code_global[s[1] - 0x21]);
+	 for (; *s != 0x00; s++) {
+		putfont8( x, y, c, font_code_global[ *s - 0x21]);
+		//putfont8( x, y, c, &font_code_global[0x20]);
+		x += 8;
+	} 
+	return;
+}
+
 void SysMain()
 {
     char *vram;
@@ -72,30 +88,30 @@ void SysMain()
     ysize = (*binfo).scrny;
     vram  = (*binfo).vram;
 
-    //InitPalette();
-    //init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
+    InitPalette();
+    init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
 	
-    /*  font_code_globalA[0]=0x00;
-	 font_code_globalA[1]=0x18;
-	 font_code_globalA[2]=0x18;
-	 font_code_globalA[3]=0x18;
-	 font_code_globalA[4]=0x18;
-	 font_code_globalA[5]=0x24;
-	 font_code_globalA[6]=0x24;
-	 font_code_globalA[7]=0x24;
-	 font_code_globalA[8]=0x24;
-	 font_code_globalA[9]=0x7e;
-	 font_code_globalA[10]=0x42;
-	 font_code_globalA[11]=0x42;
-	 font_code_globalA[12]=0x42;
-	 font_code_globalA[13]=0xe7;
-	 font_code_globalA[14]=0x00;
-	 font_code_globalA[15]=0x00; */
-	 //char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24,0x7e,0x42,0x42,0x42,0xe7,0x00,0x00};
-      putfont8(20,20,1,font_code_globalA);
-      PutChar( 20,60, font_code_globalA, 1) ;
-      //PutString(20,20,"AAA\0",9);
-      //PutString(30, 30,"There Is An INT!!!!\0",0xff00ff);
+    
+	 
+      //putfont8(20,20,1,font_code_globalA);
+     /*  PutChar( 20,10, 'H', 1) ;
+	  PutChar( 30,10, 'e', 1) ;
+	  PutChar( 40,10, 'l', 1) ;
+	  PutChar( 50,10, 'l', 1) ;
+	  PutChar( 60,10, 'o', 1) ;
+
+	  PutChar( 80,10, 'W', 1) ;
+	  PutChar( 90,10, 'o', 1) ;
+	  PutChar( 100,10, 'r', 1) ;
+	  PutChar( 110,10, 'l', 1) ;
+	  PutChar( 120,10, 'd', 1) ; */
+    
+      
+	  unsigned  char nowput[99]="GOD Will Bless My Family...";
+      PutString(10, 10,1,nowput);
+
+	  unsigned  char nowstr[66]="Hello Great World...";
+	  putfonts8_asc(10, 60,1,nowstr);
         
     
     //DrawRectangle(0,0,320,320,9);
@@ -104,31 +120,15 @@ void SysMain()
     //DrawRectangle(10,150,300,200,1);
     //DrawRectangle(19,170,90,190,10);
 
-    //PutString(20,160,9,"hello world\0");
+    //PutString(20,160,9,"hello\0");
 
    
     while(1);
 }
+ 
 void InitPalette()
 {
-    static unsigned char table_rgb[16 * 3] = {
-		0x00, 0x00, 0x00,	/*  0:黑 */
-		0xff, 0x00, 0x00,	/*  1:梁红 */
-		0x00, 0xff, 0x00,	/*  2:亮绿 */
-		0xff, 0xff, 0x00,	/*  3:亮黄 */
-		0x00, 0x00, 0xff,	/*  4:亮蓝 */
-		0xff, 0x00, 0xff,	/*  5:亮紫 */
-		0x00, 0xff, 0xff,	/*  6:浅亮蓝 */
-		0xff, 0xff, 0xff,	/*  7:白 */
-		0xc6, 0xc6, 0xc6,	/*  8:亮灰 */
-		0x84, 0x00, 0x00,	/*  9:暗红 */
-		0x00, 0x84, 0x00,	/* 10:暗绿 */
-		0x84, 0x84, 0x00,	/* 11:暗黄 */
-		0x00, 0x00, 0x84,	/* 12:暗青 */
-		0x84, 0x00, 0x84,	/* 13:暗紫 */
-		0x00, 0x84, 0x84,	/* 14:浅暗蓝 */
-		0x84, 0x84, 0x84	/* 15:暗灰 */
-	};
+   
 	set_palette(0, 15, table_rgb);
 	return;
 

@@ -14,7 +14,7 @@ start:
     movb    $8,    VMODE
     movw    $320,  SCRNX
     movw    $200,  SCRNY
-    movl    $0x000a000,    VRAM
+    movl    $0xa0000,    VRAM
 
     movb    $0x02, %ah
     int $0x16

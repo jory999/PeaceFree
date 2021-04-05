@@ -18,8 +18,8 @@ bootsect.o : bootsect.s Makefile
 	#as --32 bootsect.s -o bootsect.o 
 	as --32 -o bootsect.o bootsect.s	
 
-setup.bin : setup.o   Makefile kernel.ld main.o functions.o 
-	ld -M  -m elf_i386 -o setup.elf setup.o -T kernel.ld main.o functions.o 
+setup.bin : setup.o   Makefile kernel.ld main.o functions.o font.o
+	ld -M  -m elf_i386 -o setup.elf setup.o -T kernel.ld main.o functions.o font.o
 	objcopy -O binary setup.elf setup.bin
 	#ld -M --oformat binary -m elf_i386 -o setup.bin setup.o -T kernel.ld main.o font.o
 	#ld  -o setup.bin setup.o 

@@ -1,3 +1,4 @@
+
 #include "font.h"
 //#include <stdio.h> 
 
@@ -37,6 +38,29 @@ struct BOOTINFO{
 
 };
 
+//const char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24,0x7e,0x42,0x42,0x42,0xe7,0x00,0x00};
+
+void putfont8( int x, int y, char c, char *font)
+{
+	int i;  //
+	char *p ;/* data */
+	char d;
+	for (i = 0; i < 16; i++) {
+		p = 0xa0000 + (y + i) * 320 + x;
+		d = font[i];
+        
+		if ((d & 0x80) != 0) { p[0] = c; }
+		if ((d & 0x40) != 0) { p[1] = c; }
+		if ((d & 0x20) != 0) { p[2] = c; }
+		if ((d & 0x10) != 0) { p[3] = c; }
+		if ((d & 0x08) != 0) { p[4] = c; }
+		if ((d & 0x04) != 0) { p[5] = c; }
+		if ((d & 0x02) != 0) { p[6] = c; }
+		if ((d & 0x01) != 0) { p[7] = c; }
+	}
+	return;
+}
+
 void SysMain()
 {
     char *vram;
@@ -48,12 +72,29 @@ void SysMain()
     ysize = (*binfo).scrny;
     vram  = (*binfo).vram;
 
-    InitPalette();
-    init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
-
-   
-    
-      //PutString(20,20,"hello world...\0",0xc6c6c6);
+    //InitPalette();
+    //init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
+	
+    /*  font_code_globalA[0]=0x00;
+	 font_code_globalA[1]=0x18;
+	 font_code_globalA[2]=0x18;
+	 font_code_globalA[3]=0x18;
+	 font_code_globalA[4]=0x18;
+	 font_code_globalA[5]=0x24;
+	 font_code_globalA[6]=0x24;
+	 font_code_globalA[7]=0x24;
+	 font_code_globalA[8]=0x24;
+	 font_code_globalA[9]=0x7e;
+	 font_code_globalA[10]=0x42;
+	 font_code_globalA[11]=0x42;
+	 font_code_globalA[12]=0x42;
+	 font_code_globalA[13]=0xe7;
+	 font_code_globalA[14]=0x00;
+	 font_code_globalA[15]=0x00; */
+	 //char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24,0x7e,0x42,0x42,0x42,0xe7,0x00,0x00};
+      putfont8(20,20,1,font_code_globalA);
+      PutChar( 20,60, font_code_globalA, 1) ;
+      //PutString(20,20,"AAA\0",9);
       //PutString(30, 30,"There Is An INT!!!!\0",0xff00ff);
         
     

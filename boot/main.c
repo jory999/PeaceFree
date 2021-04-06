@@ -1,9 +1,11 @@
 
 //#include "font.h"
 //#include <stdio.h> 
+//#include <string.h>
 extern unsigned char table_rgb[16 * 3];
 extern const char font_code_globalA[16];
 extern const char font_code_global[94][16];
+extern char cursor[16][16];
 
 extern void FunctionCli(void);
 extern void FunctionSti(void);
@@ -77,21 +79,86 @@ void putfonts8_asc( int x, int y, char c, unsigned char *s)
 	return;
 }
 
+////////////draw cursor
+
+void init_mouse_cursor8(char *mouse, char bc)
+
+{
+	/* static char cursor[16][16] = {
+		"**************..",
+		"*OOOOOOOOOOO*...",
+		"*OOOOOOOOOO*....",
+		"*OOOOOOOOO*.....",
+		"*OOOOOOOO*......",
+		"*OOOOOOO*.......",
+		"*OOOOOOO*.......",
+		"*OOOOOOOO*......",
+		"*OOOO**OOO*.....",
+		"*OOO*..*OOO*....",
+		"*OO*....*OOO*...",
+		"*O*......*OOO*..",
+		"**........*OOO*.",
+		"*..........*OOO*",
+		"............*OO*",
+		".............***" 
+	}; */
+	int x, y;
+
+	for (y = 0; y < 16; y++) {
+		for (x = 0; x < 16; x++) {
+			if (cursor[y][x] == '*') {
+				mouse[y * 16 + x] = COL8_000000;
+			}
+			if (cursor[y][x] == 'O') {
+				mouse[y * 16 + x] = COL8_FFFFFF;
+			}
+			if (cursor[y][x] == '.') {
+				mouse[y * 16 + x] = bc;
+			}
+		}
+	}
+	return;
+}
+
+void putblock8_8(char *vram, int vxsize, int pxsize,
+	int pysize, int px0, int py0, char *buf, int bxsize)
+{
+	int x, y;
+	for (y = 0; y < pysize; y++) {
+		for (x = 0; x < pxsize; x++) {
+			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+		}
+	}
+	return;
+}
+
+/////cursor end
+
+ //unsigned char p[99]="My Great World...\0";
+  char *p="My Great World...\0";
+
+
 void SysMain()
 {
     char *vram;
     int xsize, ysize;
     struct BOOTINFO *binfo;
 
-     binfo = (struct BOOTINFO * ) 0x0ff0;
+    binfo = (struct BOOTINFO * ) 0x0ff0;
     xsize = (*binfo).scrnx;
     ysize = (*binfo).scrny;
     vram  = (*binfo).vram;
 
+	char s[40], mcursor[256];
+	int mx, my;
+
     InitPalette();
     init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
 	
-    
+    mx = (binfo->scrnx - 16) / 2; /* 计算画面的中心坐标*/
+	my = (binfo->scrny - 28 - 16) / 2;
+	init_mouse_cursor8(mcursor, COL8_008484);
+	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
 	 
       //putfont8(20,20,1,font_code_globalA);
      /*  PutChar( 20,10, 'H', 1) ;
@@ -107,11 +174,15 @@ void SysMain()
 	  PutChar( 120,10, 'd', 1) ; */
     
       
-	  unsigned  char nowput[99]="GOD Will Bless My Family...\0";
+	  unsigned  char nowput[99]="GOD Will Bless My Family...";
       PutString(10, 10,7,nowput);
 
-	  unsigned  char nowstr[66]="Hello Great World...\0";
-	  putfonts8_asc(10, 60,7,nowstr);
+	  unsigned  char nowstr[66]="Hello Great World...";
+	  putfonts8_asc(20, 60,7,nowstr);
+
+//char p[77]="My Great World...\0";
+	  putfonts8_asc(30, 100,7,p);
+	  PutString(10, 30,7,p);
         
     
     //DrawRectangle(0,0,320,320,9);

@@ -48,15 +48,13 @@ struct BOOTINFO{
 
 //static const char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24,0x7e,0x42,0x42,0x42,0xe7,0x00,0x00};
 
-void putfont8( int x, int y, char c, char *font)
+void putfont8(char *vram, int xsize, int x, int y, char c, char *font)
 {
-	int i;  //
-	char *p ;/* data */
-	char d;
+	int i;
+	char *p, d /* data */;
 	for (i = 0; i < 16; i++) {
-		p = 0xa0000 + (y + i) * 320 + x;
+		p = vram + (y + i) * xsize + x;
 		d = font[i];
-        
 		if ((d & 0x80) != 0) { p[0] = c; }
 		if ((d & 0x40) != 0) { p[1] = c; }
 		if ((d & 0x20) != 0) { p[2] = c; }
@@ -69,7 +67,7 @@ void putfont8( int x, int y, char c, char *font)
 	return;
 }
 
-void putfonts8_asc( int x, int y, char c, unsigned char *s)
+/* void putfonts8_asc(char *vram, int x, int y, char c, unsigned char *s)
 {
 	//int iii=s[0] - 0x21;
 	//putfont8( x, y+10, c, &font_code_global[iii]);
@@ -79,6 +77,17 @@ void putfonts8_asc( int x, int y, char c, unsigned char *s)
 		//putfont8( x, y, c, &font_code_global[0x20]);
 		x += 8;
 	} 
+	return;
+}
+ */
+void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s)
+{
+	extern char hankaku[4096];
+	/* C语言中，字符串都是以0x00结尾 */
+	for (; *s != 0x00; s++) {
+		putfont8(vram, xsize, x, y, c, font_code_global[ *s - 0x21]);
+		x += 8;
+	}
 	return;
 }
 
@@ -167,10 +176,10 @@ void SysMain()
     
       
 	  unsigned  char nowput[99]="GOD Will Bless My Family...";
-      PutString(10, 10,7,nowput);
+      PutString(binfo->vram, binfo->scrnx,10, 10,7,nowput);
 
 	  unsigned  char nowstr[66]="Hello Great World...";
-	  putfonts8_asc(20, 60,7,nowstr);
+	  putfonts8_asc(binfo->vram, binfo->scrnx, 20, 60,7,nowstr);
 
 //char p[77]="My Great World...\0";
 	 // putfonts8_asc(30, 100,7,p);
@@ -185,8 +194,12 @@ void SysMain()
 
     //PutString(20,160,9,"hello\0");
 
+	
+
    InitPIC();
    InitIDT();
+   int yy = 6/0;
+
     while(1);
 }
  

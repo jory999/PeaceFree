@@ -101,4 +101,4 @@ start_protect:
 
 
 gdt_size:   .word   31
-gdt_base:   .long   0x9000 #定义GDT位置
+gdt_base:   .long   0x90000 #定义GDT位置

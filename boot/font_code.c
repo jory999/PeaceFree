@@ -136,11 +136,28 @@ const char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24
 		".............***" 
 	}; 
 
+//extern void PutString(int x,int y, int color, unsigned char *str111);
+struct BOOTINFO1{
+       char xyls, leds, vmode, reserve;
+       short scrnx, scrny;
+       char *vram ;
+
+};
 void DefaultIntCallBack()//回调函数
 {
+    char *vram;
+    int xsize, ysize;
+    struct BOOTINFO1 *binfo;
+
+    binfo = (struct BOOTINFO1 * ) 0x0ff0;
+    xsize = (*binfo).scrnx;
+    ysize = (*binfo).scrny;
+    vram  = (*binfo).vram;
     //PutString(100, 100,"There Is An INT!!!!\0",0xffffff);
-	//unsigned  char nowput[99]="GOD Will Bless My Family...";
-      PutString(10, 10,7,"There Is An INT!!!!\0");
+    static unsigned  char nowput9[66]="There Is An INT";
+      PutString(binfo->vram, binfo->scrnx,60, 90,7,nowput9);
+	/* unsigned  char *nowput9="There Is An INT";
+      PutString(binfo->vram, binfo->scrnx,10, 90,7,nowput9); */
 
 	
 }    

@@ -1,6 +1,6 @@
 #include "font.h"
-void DrawPoint(int x,int y,int color);//画一个点
-void PutChar(int x,int y, char put_char, int color);//画一个字符
+void DrawPoint(char *vram, int xsize,int x,int y,int color);//画一个点
+void PutChar(char *vram, int xsize,int x,int y, char put_char, int color);//画一个字符
 
 extern const char font_code_global[94][16];
 
@@ -19,23 +19,23 @@ extern const char font_code_global[94][16];
 } */
 
 
- void DrawPoint(int x,int y,int color)
+ void DrawPoint(char *vram, int xsize,int x,int y,int color)
 {
     char *p;
-      p = (0xa0000 + 320 * y + x);//计算某个像素的内存地址
+      p = (vram + xsize * y + x);//计算某个像素的内存地址
     
     *p     = color ;
     return;
 }
 
-void PutString(int x,int y, int color, unsigned char *str111)//输出字符串，输出直到结尾为\0停止符
+void PutString(char *vram, int xsize,int x,int y, int color, unsigned char *str111)//输出字符串，输出直到结尾为\0停止符
 {
      int i=0;
     //char *p=str111;
     
      while(str111[i] != '\0')
      {
-        PutChar(x+8*i , y, str111[i],color);//there are 2 pixels between char
+        PutChar(vram,  xsize,x+8*i , y, str111[i],color);//there are 2 pixels between char
          i++;
      }
 
@@ -93,7 +93,7 @@ void PutString(int x,int y, int color, unsigned char *str111)//输出字符串�
     
 } */
 
-void PutChar(int x,int y, char put_char, int color)//输出一个字符
+void PutChar(char *vram, int xsize,int x,int y, char put_char, int color)//输出一个字符
 {
 
     int i;
@@ -102,21 +102,21 @@ void PutChar(int x,int y, char put_char, int color)//输出一个字符
         for (i=0;i<16;i++)//扫描点阵，从上到下16行
         {
             if((font_code_global[put_char-0x21][i] & 0x80) == 0x80) //compare font & 1000 0000
-                DrawPoint(x+0,y+i,color);
+                DrawPoint(vram,  xsize,x+0,y+i,color);
             if((font_code_global[put_char-0x21][i] & 0x40) == 0x40) //compare font & 0100 0000
-                DrawPoint(x+1,y+i,color);
+                DrawPoint(vram,  xsize,x+1,y+i,color);
             if((font_code_global[put_char-0x21][i] & 0x20) == 0x20) //compare font & 0010 0000
-                DrawPoint(x+2,y+i,color);
+                DrawPoint(vram,  xsize,x+2,y+i,color);
             if((font_code_global[put_char-0x21][i] & 0x10) == 0x10) //compare font & 0001 0000
-                DrawPoint(x+3,y+i,color);
+                DrawPoint(vram,  xsize,x+3,y+i,color);
             if((font_code_global[put_char-0x21][i] & 0x08) == 0x08) //compare font & 0000 1000
-                DrawPoint(x+4,y+i,color);
+                DrawPoint(vram,  xsize,x+4,y+i,color);
             if((font_code_global[put_char-0x21][i] & 0x04) == 0x04) //compare font & 0000 0100
-                DrawPoint(x+5,y+i,color);
+                DrawPoint(vram,  xsize,x+5,y+i,color);
             if((font_code_global[put_char-0x21][i] & 0x02) == 0x02) //compare font & 0000 0010
-                DrawPoint(x+6,y+i,color);
+                DrawPoint(vram,  xsize,x+6,y+i,color);
             if((font_code_global[put_char-0x21][i] & 0x01) == 0x01) //compare font & 0000 0001
-                DrawPoint(x+7,y+i,color);
+                DrawPoint(vram,  xsize,x+7,y+i,color);
         }
     }
 }

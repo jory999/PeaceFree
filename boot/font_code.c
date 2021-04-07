@@ -135,3 +135,37 @@ const char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24
 		"............*OO*",
 		".............***" 
 	}; 
+
+void DefaultIntCallBack()//回调函数
+{
+    //PutString(100, 100,"There Is An INT!!!!\0",0xffffff);
+	//unsigned  char nowput[99]="GOD Will Bless My Family...";
+      PutString(10, 10,7,"There Is An INT!!!!\0");
+
+	
+}    
+extern void FunctionLidt(short, void *);
+void InitIDT()
+{
+    static struct idt_struct{
+    short   offset1;
+    short   selector;
+    short   no_use;
+    short   offset2;
+    } idt[0x30];//初始化0~0x30的中断
+
+    int i;
+    ////////////#0，必须有0项
+    idt[0].offset1 = 0x00;
+    idt[0].selector = 0x00;
+    idt[0].no_use = 0x00;
+    idt[0].offset2 = 0x00;
+    for (i=1;i<0x30;i++)
+    {
+        idt[i].offset1 = (short)((int)(void*)DefaultIntCallBack-0x8200);
+        idt[i].selector = 0x0008;
+        idt[i].no_use = 0x8e00;
+        idt[i].offset2 = (short)(((int)(void*)DefaultIntCallBack-0x8200)>>16);  
+    }
+    FunctionLidt(0x30*8-1,idt);
+}

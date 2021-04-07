@@ -39,10 +39,10 @@ functions.o : functions.s Makefile
 	as --32 functions.s -o functions.o
 
 font.o : font.c  font.h Makefile 
-	gcc -c font.c  -o font.o -m32 
+	gcc -c font.c  -o font.o -m32 -g 
 
 font_code.o : font_code.c font.h Makefile
-	gcc -c font_code.c -o font_code.o -m32	
+	gcc -c font_code.c -o font_code.o -m32	 -g
 
 	
 clean :

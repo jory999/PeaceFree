@@ -5,6 +5,7 @@
 .global FuntionIn8, FuntionIn16, FuntionIn32
 .global FunctionCli, FunctionSti
 .global FunctionLoadEflags, FunctionStoreEflags
+.global FunctionLidt
 
 FunctionHlt:    #void FunctionHlt(void)
     hlt
@@ -64,3 +65,10 @@ FunctionStoreEflags:    #void FunctionStoreEflags(int eflags)
     push    %eax
     popf
     ret
+
+FunctionLidt: #void FunctionLidt(short,void *)
+    movw    4(%esp),    %ax
+    movw    %ax,        6(%esp) 
+    lidt    6(%esp) #巧妙使用
+    sti
+    ret    

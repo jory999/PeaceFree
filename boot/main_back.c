@@ -14,8 +14,6 @@ extern int FunctionLoadEflags(void);
 extern void FunctionStoreEflags(int eflags);
 extern void FunctionLidt(short, void *);
 
-
-
 void InitPalette();
 void DrawRectangle(int x1,int y1,int x2,int y2,int color);
 void init_screen(char *vram, int x, int y);
@@ -137,8 +135,60 @@ void putblock8_8(char *vram, int vxsize, int pxsize,
 
 /////cursor end
 
- //unsigned char p[99]="My Great World...\0";
- // char *p="My Great World...\0";
+void InitPIC()
+{
+//PIC configuration:
+//设置主8259A和从8259A
+    FunctionOut8(0x20,0x11);
+    FunctionOut8(0xa0,0x11);
+//设置IRQ0-IRQ7的中断向量为0x20-0x27
+    FunctionOut8(0x21,0x20);
+//设置IRQ8-IRQ15的中断向量为0x28-0x2f
+    FunctionOut8(0xa1,0x28);
+//使从片PIC2连接到主片上
+    FunctionOut8(0x21,0x04);
+    FunctionOut8(0xa1,0x02);
+//打开8086模式
+    FunctionOut8(0x21,0x01);
+    FunctionOut8(0xa1,0x01);
+//关闭IRQ0-IRQ7的0x20-0x27中断
+    FunctionOut8(0x21,0xff);
+//关闭IRQ8-IRQ15的0x28-0x2f中断
+    FunctionOut8(0xa1,0xff);
+}
+
+void DefaultIntCallBack()//回调函数
+{
+    PutString(100, 100,"There Is An INT!!!!\0",0xffffff);
+}
+
+
+void InitIDT()
+{
+    static struct idt_struct{
+    short   offset1;
+    short   selector;
+    short   no_use;
+    short   offset2;
+    } idt[0x30];//初始化0~0x30的中断
+
+    int i;
+    ////////////#0，必须有0项
+    idt[0].offset1 = 0x00;
+    idt[0].selector = 0x00;
+    idt[0].no_use = 0x00;
+    idt[0].offset2 = 0x00;
+    for (i=1;i<0x30;i++)
+    {
+        idt[i].offset1 = (short)((int)(void*)DefaultIntCallBack-0x8200);
+        idt[i].selector = 0x0008;
+        idt[i].no_use = 0x8e00;
+        idt[i].offset2 = (short)(((int)(void*)DefaultIntCallBack-0x8200)>>16);  
+    }
+    FunctionLidt(0x30*8-1,idt);
+}
+
+ 
 
 
 void SysMain()
@@ -155,6 +205,8 @@ void SysMain()
 	char s[40], mcursor[256];
 	int mx, my;
 
+	
+
     InitPalette();
     init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
 	
@@ -163,7 +215,18 @@ void SysMain()
 	init_mouse_cursor8(mcursor, COL8_008484);
 	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
 	 
-     
+      //putfont8(20,20,1,font_code_globalA);
+     /*  PutChar( 20,10, 'H', 1) ;
+	  PutChar( 30,10, 'e', 1) ;
+	  PutChar( 40,10, 'l', 1) ;
+	  PutChar( 50,10, 'l', 1) ;
+	  PutChar( 60,10, 'o', 1) ;
+
+	  PutChar( 80,10, 'W', 1) ;
+	  PutChar( 90,10, 'o', 1) ;
+	  PutChar( 100,10, 'r', 1) ;
+	  PutChar( 110,10, 'l', 1) ;
+	  PutChar( 120,10, 'd', 1) ; */
     
       
 	  unsigned  char nowput[99]="GOD Will Bless My Family...";
@@ -172,10 +235,7 @@ void SysMain()
 	  unsigned  char nowstr[66]="Hello Great World...";
 	  putfonts8_asc(20, 60,7,nowstr);
 
-//char p[77]="My Great World...\0";
-	 // putfonts8_asc(30, 100,7,p);
-	  //PutString(10, 30,7,p);
-        
+
     
     //DrawRectangle(0,0,320,320,9);
     //DrawRectangle(10,10,100,100,10);
@@ -185,8 +245,11 @@ void SysMain()
 
     //PutString(20,160,9,"hello\0");
 
-   InitPIC();
-   InitIDT();
+	//InitPIC();
+   //InitIDT();
+     
+	// int aaa=5/0;
+   
     while(1);
 }
  
@@ -264,63 +327,6 @@ void init_screen(char *vram, int x, int y)
 	boxfill8(vram, x, COL8_FFFFFF, x -  3, y - 24, x -  3, y -  3);
 	return;
 }
-
-void InitPIC()
-{
-//PIC configuration:
-//设置主8259A和从8259A
-    FunctionOut8(0x20,0x11);
-    FunctionOut8(0xa0,0x11);
-//设置IRQ0-IRQ7的中断向量为0x20-0x27
-    FunctionOut8(0x21,0x20);
-//设置IRQ8-IRQ15的中断向量为0x28-0x2f
-    FunctionOut8(0xa1,0x28);
-//使从片PIC2连接到主片上
-    FunctionOut8(0x21,0x04);
-    FunctionOut8(0xa1,0x02);
-//打开8086模式
-    FunctionOut8(0x21,0x01);
-    FunctionOut8(0xa1,0x01);
-//关闭IRQ0-IRQ7的0x20-0x27中断
-    FunctionOut8(0x21,0xff);
-//关闭IRQ8-IRQ15的0x28-0x2f中断
-    FunctionOut8(0xa1,0xff);
-}
-
-/* void DefaultIntCallBack()//回调函数
-{
-    //PutString(100, 100,"There Is An INT!!!!\0",0xffffff);
-	//unsigned  char nowput[99]="GOD Will Bless My Family...";
-      PutString(10, 10,7,"There Is An INT!!!!\0");
-
-	
-} */
-
-
-/* void InitIDT1()
-{
-    static struct idt_struct{
-    short   offset1;
-    short   selector;
-    short   no_use;
-    short   offset2;
-    } idt[0x30];//初始化0~0x30的中断
-
-    int i;
-    ////////////#0，必须有0项
-    idt[0].offset1 = 0x00;
-    idt[0].selector = 0x00;
-    idt[0].no_use = 0x00;
-    idt[0].offset2 = 0x00;
-    for (i=1;i<0x30;i++)
-    {
-        idt[i].offset1 = (short)((int)(void*)DefaultIntCallBack-0x8200);
-        idt[i].selector = 0x0008;
-        idt[i].no_use = 0x8e00;
-        idt[i].offset2 = (short)(((int)(void*)DefaultIntCallBack-0x8200)>>16);  
-    }
-    FunctionLidt(0x30*8-1,idt);
-} */
  
 
  /* void SysMain()

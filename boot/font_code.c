@@ -154,7 +154,8 @@ void DefaultIntCallBack()//回调函数
     ysize = (*binfo).scrny;
     vram  = (*binfo).vram;
     //PutString(100, 100,"There Is An INT!!!!\0",0xffffff);
-    static unsigned  char nowput9[66]="There Is An INT";
+      unsigned  char *nowput9="There Is An INT";
+      //putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, nowput9);
       PutString(binfo->vram, binfo->scrnx,60, 90,7,nowput9);
 	/* unsigned  char *nowput9="There Is An INT";
       PutString(binfo->vram, binfo->scrnx,10, 90,7,nowput9); */
@@ -166,8 +167,8 @@ void DefaultIntCallBack()//回调函数
 /* 来自PS/2键盘的中断 */
 {
 	struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
-	boxfill8(binfo->vram, binfo->scrnx, 9, 0, 0, 32 * 8 - 1, 15);
-    static unsigned  char nowput91[66]="INT 21 (IRQ-1) : PS/2 keyboard";
+	boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
+     unsigned  char nowput91[66]="INT 21 (IRQ-1) : PS/2 keyboard";
 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, nowput91);
 	for (;;) {
 		FunctionHlt();
@@ -179,7 +180,8 @@ void inthandler2c(int *esp)
 {
 	struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
 	boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
-	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, "INT 2C (IRQ-12) : PS/2 mouse");
+     unsigned  char nowput92[66]="IINT 2C (IRQ-12) : PS/2 mouse";
+	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, nowput92);
 	for (;;) {
 		FunctionHlt();
 	}
@@ -198,6 +200,8 @@ void inthandler27(int *esp)
 void asm_inthandler21(void);
 void asm_inthandler27(void);
 void asm_inthandler2c(void);
+
+//void asm_DefaultIntCallBack(void);
 
 extern void FunctionLidt(short, void *);
 

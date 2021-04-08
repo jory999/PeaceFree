@@ -172,18 +172,21 @@ void SysMain()
 	my = (binfo->scrny - 28 - 16) / 2;
 	init_mouse_cursor8(mcursor, COL8_008484);
 	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
+
+	
+
 	 
-     
+    //  printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, nowput,nowputs);
     
       
-	  unsigned  char nowput[99]="GOD Will Bless My Family...";
-      PutString(binfo->vram, binfo->scrnx,10, 10,7,nowput);
+	  
+      //PutString(binfo->vram, binfo->scrnx,10, 10,7,nowput);
 
 	  unsigned  char nowstr[66]="Hello Great World...";
-	  putfonts8_asc(binfo->vram, binfo->scrnx, 20, 60,7,nowstr);
+	  //putfonts8_asc(binfo->vram, binfo->scrnx, 20, 60,7,nowstr);
 
 	   //sprintf(s, "scrnx = %d", binfo->scrnx);
-	   putfonts8_asc(binfo->vram, binfo->scrnx, 16, 64, 7, s);
+	  // putfonts8_asc(binfo->vram, binfo->scrnx, 16, 64, 7, s);
 
 //char p[77]="My Great World...\0";
 	 // putfonts8_asc(30, 100,7,p);
@@ -204,6 +207,11 @@ void SysMain()
 
    FunctionOut8(0x0021, 0xf9); /* 开放PIC1和键盘中断(11111001) */
    FunctionOut8(0x00a1, 0xef); /* 开放鼠标中断(11101111) */
+
+   unsigned  char nowput[99]="GOD Will Bless My Family%s";
+	unsigned  char nowputs[10]="Amen";
+
+     printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, "nowput%c",'H');
   
    //int yy = 6/0;
 

@@ -1,0 +1,178 @@
+# 1 "font.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 31 "<command-line>"
+# 1 "/usr/include/stdc-predef.h" 1 3 4
+# 32 "<command-line>" 2
+# 1 "font.c"
+# 1 "font.h" 1
+
+void DrawPoint(char *vram, int xsize,int x,int y,int color);
+void PutChar(char *vram, int xsize,int x,int y, char put_char, int color);
+void PutString(char *vram, int xsize,int x,int y, int color, unsigned char *str111);
+int printfa(char *vram, int xsize,int x, int y, int color, const char * format, ...);
+
+void DrawFontPoint(int x,int y,int color);
+char *Int2String(int a, char *buf);
+void PutCharHex(char *vram, int xsize,int x, int y, int color, char c);
+void PutIntHex(char *vram, int xsize,int x,int y,int color, int a);
+# 2 "font.c" 2
+void DrawPoint(char *vram, int xsize,int x,int y,int color);
+void PutChar(char *vram, int xsize,int x,int y, char put_char, int color);
+
+char *Int2String(int a, char *buf);
+
+void PutCharHex(char *vram, int xsize,int x, int y, int color, char c);
+void PutIntHex(char *vram, int xsize,int x,int y,int color, int a);
+
+
+extern const char font_code_global[94][16];
+
+
+typedef int* va_list;
+# 31 "font.c"
+ void DrawPoint(char *vram, int xsize,int x,int y,int color)
+{
+    char *p;
+      p = (vram + xsize * y + x);
+
+    *p = color ;
+    return;
+}
+
+void PutString(char *vram, int xsize,int x,int y, int color, unsigned char *str111)
+{
+     int i=0;
+
+
+     while(str111[i] != '\0')
+     {
+        PutChar(vram, xsize,x+8*i , y, str111[i],color);
+         i++;
+     }
+
+}
+# 105 "font.c"
+void PutChar(char *vram, int xsize,int x,int y, char put_char, int color)
+{
+
+    int i;
+    if (put_char >= 0x21 && put_char <= 0x7e)
+    {
+        for (i=0;i<16;i++)
+        {
+            if((font_code_global[put_char-0x21][i] & 0x80) == 0x80)
+                DrawPoint(vram, xsize,x+0,y+i,color);
+            if((font_code_global[put_char-0x21][i] & 0x40) == 0x40)
+                DrawPoint(vram, xsize,x+1,y+i,color);
+            if((font_code_global[put_char-0x21][i] & 0x20) == 0x20)
+                DrawPoint(vram, xsize,x+2,y+i,color);
+            if((font_code_global[put_char-0x21][i] & 0x10) == 0x10)
+                DrawPoint(vram, xsize,x+3,y+i,color);
+            if((font_code_global[put_char-0x21][i] & 0x08) == 0x08)
+                DrawPoint(vram, xsize,x+4,y+i,color);
+            if((font_code_global[put_char-0x21][i] & 0x04) == 0x04)
+                DrawPoint(vram, xsize,x+5,y+i,color);
+            if((font_code_global[put_char-0x21][i] & 0x02) == 0x02)
+                DrawPoint(vram, xsize,x+6,y+i,color);
+            if((font_code_global[put_char-0x21][i] & 0x01) == 0x01)
+                DrawPoint(vram, xsize,x+7,y+i,color);
+        }
+    }
+}
+# 140 "font.c"
+char *Int2String(int a, char *buf)
+{
+    int num = a;
+    int i = 0;
+    int len = 0;
+
+    do
+    {
+        buf[i++] = num % 10 + '0';
+        num /= 10;
+    } while (num);
+    buf[i] = '\0';
+
+    len = i;
+    for (i = 0; i < len/2; i++)
+    {
+        char tmp;
+        tmp = buf[i];
+        buf[i] = buf[len-i-1];
+        buf[len-i-1] = tmp;
+    }
+
+    return buf;
+}
+
+void PutCharHex(char *vram, int xsize,int x, int y, int color, char c)
+{
+    char * hex = "0123456789ABCDEF";
+    PutChar(vram,xsize, x,y,hex[(c>>4) & 0x0F],color);
+    PutChar(vram,xsize, x+8,y,hex[(c>>0) & 0x0F],color);
+}
+
+void PutIntHex(char *vram, int xsize,int x,int y,int color, int a)
+{
+    PutCharHex(vram,xsize,x,y,color, (a>>24) & 0xFF );
+    PutCharHex(vram,xsize,x+16,y,color, (a>>16) & 0xFF );
+    PutCharHex(vram,xsize,x+32,y,color, (a>>8) & 0xFF );
+    PutCharHex(vram,xsize,x+48,y,color, (a>>0) & 0xFF );
+}
+  
+void printfa(char *vram, int xsize, int xint y, int color, const char * format, ...)
+{
+
+
+
+
+
+    char c;
+    va_list ap;
+    ap = (int *)&(format) + 1;
+    int i=0;
+    while ((c = *format++) != '\0')
+    {
+    i++;
+        switch (c)
+        {
+            case '%':
+                c = *format++;
+                switch (c)
+                {
+                    char ch;
+                    char * p;
+                    int a;
+                    char buf[100];
+                    case 'c':
+                        ch = (*(int *)ap++);
+                        PutChar(vram,xsize, x+8*i,y,ch,color);
+
+                        break;
+                    case 's':
+                        p = (*(char * *)ap++);
+                        PutString(vram,xsize,x+8*i, y, color, p);
+                        break;
+                    case 'x':
+                        a = (*(int *)ap++);
+                        PutIntHex(vram,xsize,x,y,color,a);
+                        break;
+                    case 'd':
+                        a = (*(int *)ap++);
+                        Int2String(a, buf);
+                        PutString(vram,xsize,x+8*i, y, color, buf);
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
+
+            default:
+                PutChar(vram,xsize,x+8*i,y,c,color);
+                break;
+        }
+    }
+    //return 0;
+}

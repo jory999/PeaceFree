@@ -106,7 +106,7 @@ asm_inthandler27:
 		pop		%es
 		iretl
 
-        asm_inthandler2c:
+asm_inthandler2c:
 		pushw	%es
 		pushw	%ds
 		pushal
@@ -121,6 +121,8 @@ asm_inthandler27:
 		pop		%ds
 		pop		%es
 		iretl
+
+
  
 
 

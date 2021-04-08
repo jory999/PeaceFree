@@ -1,3 +1,5 @@
+
+
 run:bootsect.bin setup.bin
 	dd if=bootsect.bin of=loader.img bs=512 count=1
 	dd if=setup.bin of=setup.img bs=1474048 count=1 conv=sync
@@ -19,7 +21,7 @@ bootsect.o : bootsect.s Makefile
 	as --32 -o bootsect.o bootsect.s	
 
 setup.bin : setup.o   Makefile kernel.ld main.o functions.o font.o font_code.o
-	ld -M  -m elf_i386 -o setup.elf setup.o -T kernel.ld main.o functions.o font.o font_code.o
+	ld -M  -m elf_i386 -o setup.elf setup.o -T kernel.ld main.o functions.o font.o font_code.o 
 	objcopy -O binary setup.elf setup.bin
 	#ld -M --oformat binary -m elf_i386 -o setup.bin setup.o -T kernel.ld main.o font.o
 	#ld  -o setup.bin setup.o 

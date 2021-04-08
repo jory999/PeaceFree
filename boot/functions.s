@@ -6,6 +6,7 @@
 .global FunctionCli, FunctionSti
 .global FunctionLoadEflags, FunctionStoreEflags
 .global FunctionLidt
+.global asm_inthandler21,asm_inthandler27,asm_inthandler2c
 
 FunctionHlt:    #void FunctionHlt(void)
     hlt
@@ -71,4 +72,55 @@ FunctionLidt: #void FunctionLidt(short,void *)
     movw    %ax,        6(%esp) 
     lidt    6(%esp) #巧妙使用
     sti
-    ret    
+    ret   
+
+asm_inthandler21:
+		pushw	%es
+		pushw	%ds
+		pushal
+		movl		%esp,%eax
+		pushl	%eax
+		movw		%ss,%ax
+		movw		%ax,%ds
+		movw		%ax,%es
+		CALL	inthandler21
+		popl		%eax
+		popal
+		pop		%ds
+		pop		%es
+		iretl
+
+asm_inthandler27:
+		pushw	%es
+		pushw	%ds
+		pushal
+		movl		%esp,%eax
+		pushl	%eax
+		movw		%ss,%ax
+		movw		%ax,%ds
+		movw		%ax,%es
+		CALL	inthandler27
+		popl		%eax
+		popal
+		pop		%ds
+		pop		%es
+		iretl
+
+        asm_inthandler2c:
+		pushw	%es
+		pushw	%ds
+		pushal
+		movl		%esp,%eax
+		pushl	%eax
+		movw		%ss,%ax
+		movw		%ax,%ds
+		movw		%ax,%es
+		CALL	inthandler2c
+		popl		%eax
+		popal
+		pop		%ds
+		pop		%es
+		iretl
+ 
+
+

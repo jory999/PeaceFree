@@ -7,6 +7,7 @@ extern const char font_code_globalA[16];
 extern const char font_code_global[94][16];
 extern char cursor[16][16];
 
+extern FunctionHlt(void);
 extern void FunctionCli(void);
 extern void FunctionSti(void);
 extern void FunctionOut8(int port, int data);
@@ -45,7 +46,7 @@ struct BOOTINFO{
        char *vram ;
 
 };
-
+#define ADR_BOOTINFO	0x00000ff0
 //static const char font_code_globalA[16] = {0x00,0x18,0x18,0x18,0x18,0x24,0x24,0x24,0x24,0x7e,0x42,0x42,0x42,0xe7,0x00,0x00};
 
 void putfont8(char *vram, int xsize, int x, int y, char c, char *font)
@@ -161,7 +162,7 @@ void SysMain()
     ysize = (*binfo).scrny;
     vram  = (*binfo).vram;
 
-	char s[40], mcursor[256];
+	char s[80], mcursor[256];
 	int mx, my;
 
     InitPalette();
@@ -181,6 +182,9 @@ void SysMain()
 	  unsigned  char nowstr[66]="Hello Great World...";
 	  putfonts8_asc(binfo->vram, binfo->scrnx, 20, 60,7,nowstr);
 
+	   //sprintf(s, "scrnx = %d", binfo->scrnx);
+	   putfonts8_asc(binfo->vram, binfo->scrnx, 16, 64, 7, s);
+
 //char p[77]="My Great World...\0";
 	 // putfonts8_asc(30, 100,7,p);
 	  //PutString(10, 30,7,p);
@@ -195,10 +199,13 @@ void SysMain()
     //PutString(20,160,9,"hello\0");
 
 	
-
-   InitPIC();
    InitIDT();
-   int yy = 6/0;
+   InitPIC();
+
+   FunctionOut8(0x0021, 0xf9); /* 开放PIC1和键盘中断(11111001) */
+   FunctionOut8(0x00a1, 0xef); /* 开放鼠标中断(11101111) */
+  
+   //int yy = 6/0;
 
     while(1);
 }
@@ -298,7 +305,11 @@ void InitPIC()
     FunctionOut8(0x21,0xff);
 //关闭IRQ8-IRQ15的0x28-0x2f中断
     FunctionOut8(0xa1,0xff);
+
+	FunctionOut8(0x0021,  0xfb  ); /* 11111011 PIC1以外全部禁止 */
 }
+
+
 
 /* void DefaultIntCallBack()//回调函数
 {
@@ -334,7 +345,9 @@ void InitPIC()
     }
     FunctionLidt(0x30*8-1,idt);
 } */
- 
+
+
+
 
  /* void SysMain()
 {

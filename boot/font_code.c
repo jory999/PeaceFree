@@ -160,8 +160,58 @@ void DefaultIntCallBack()//回调函数
       PutString(binfo->vram, binfo->scrnx,10, 90,7,nowput9); */
 
 	
-}    
+}  
+
+ void inthandler21(int *esp)
+/* 来自PS/2键盘的中断 */
+{
+	struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+	boxfill8(binfo->vram, binfo->scrnx, 9, 0, 0, 32 * 8 - 1, 15);
+    static unsigned  char nowput91[66]="INT 21 (IRQ-1) : PS/2 keyboard";
+	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, nowput91);
+	for (;;) {
+		FunctionHlt();
+	}
+}
+
+void inthandler2c(int *esp)
+/* 来自PS/2鼠标的中断 */
+{
+	struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+	boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
+	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, "INT 2C (IRQ-12) : PS/2 mouse");
+	for (;;) {
+		FunctionHlt();
+	}
+}
+
+void inthandler27(int *esp)
+/* PIC0中断的不完整策略 */
+/* 这个中断在Athlon64X2上通过芯片组提供的便利，只需执行一次 */
+/* 这个中断只是接收，不执行任何操作 */
+/* 为什么不处理？
+	→  因为这个中断可能是电气噪声引发的、只是处理一些重要的情况。*/
+{
+	FunctionOut8(0x0020, 0x67); /* 通知PIC的IRQ-07（参考7-1） */
+	return;
+}
+void asm_inthandler21(void);
+void asm_inthandler27(void);
+void asm_inthandler2c(void);
+
 extern void FunctionLidt(short, void *);
+
+
+/* void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, int ar)
+{
+	gd->offset_low   = offset & 0xffff;
+	gd->selector     = selector;
+	gd->dw_count     = (ar >> 8) & 0xff;
+	gd->access_right = ar & 0xff;
+	gd->offset_high  = (offset >> 16) & 0xffff;
+	return;
+} */
+
 void InitIDT()
 {
     static struct idt_struct{
@@ -171,6 +221,8 @@ void InitIDT()
     short   offset2;
     } idt[0x30];//初始化0~0x30的中断
 
+   
+
     int i;
     ////////////#0，必须有0项
     idt[0].offset1 = 0x00;
@@ -179,10 +231,28 @@ void InitIDT()
     idt[0].offset2 = 0x00;
     for (i=1;i<0x30;i++)
     {
+       
+        
         idt[i].offset1 = (short)((int)(void*)DefaultIntCallBack-0x8200);
         idt[i].selector = 0x0008;
         idt[i].no_use = 0x8e00;
         idt[i].offset2 = (short)(((int)(void*)DefaultIntCallBack-0x8200)>>16);  
     }
+        idt[0x21].offset1 = (short)((int)(void*)asm_inthandler21-0x8200);
+        idt[0x21].selector = 0x0008;
+        idt[0x21].no_use = 0x8e00;
+        idt[0x21].offset2 = (short)(((int)(void*)asm_inthandler21-0x8200)>>16);  
+
+        idt[0x2c].offset1 = (short)((int)(void*)asm_inthandler2c-0x8200);
+        idt[0x2c].selector = 0x0008;
+        idt[0x2c].no_use = 0x8e00;
+        idt[0x2c].offset2 = (short)(((int)(void*)asm_inthandler2c-0x8200)>>16);  
+
+    /* IDT设置*/
+/* 
+	set_gatedesc(idt + 0x21, (int) asm_inthandler21, 2 * 8, AR_INTGATE32);
+	set_gatedesc(idt + 0x27, (int) asm_inthandler27, 2 * 8, AR_INTGATE32);
+	set_gatedesc(idt + 0x2c, (int) asm_inthandler2c, 2 * 8, AR_INTGATE32);
+     */
     FunctionLidt(0x30*8-1,idt);
 }

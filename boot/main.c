@@ -208,10 +208,12 @@ void SysMain()
    FunctionOut8(0x0021, 0xf9); /* 开放PIC1和键盘中断(11111001) */
    FunctionOut8(0x00a1, 0xef); /* 开放鼠标中断(11101111) */
 
-   unsigned  char nowput[99]="GOD Will Bless My Family%s";
+   unsigned  char nowput[99]="GOD Will Bless My Family%c";
+   char aaa='A';
 	unsigned  char nowputs[10]="Amen";
+	
 
-     printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, "nowput%c",'H');
+     printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, nowput,aaa);
   
    //int yy = 6/0;
 

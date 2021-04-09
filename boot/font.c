@@ -176,8 +176,11 @@ void PutIntHex(char *vram, int xsize,int x,int y,int color, int a)
     PutCharHex(vram,xsize,x+32,y,color, (a>>8) & 0xFF );
     PutCharHex(vram,xsize,x+48,y,color, (a>>0) & 0xFF );
 }
+// you can add this option at  gcc commandline : -fno-stack-protector, otherwise this function is essential
+  void __stack_chk_fail_local(void) { 
 
-  void __stack_chk_fail_local(void) { }
+      // printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, "some infomation you want tell end user");
+  }
 
 int printaaa(char *vram, int xsize,int x, int y, int color, const char * format, ...)
 {
@@ -204,12 +207,13 @@ int printaaa(char *vram, int xsize,int x, int y, int color, const char * format,
                     int a;
                     char buf[100];            
                     case 'c':
-                        ch = va_arg(ap, int);
+                        ch = va_arg(ap, int); 
                         PutChar(vram,xsize, x+8*i,y,ch,color);
                         //PutChar(vram,  xsize,x+8*i , y, str111[i],color);
                         break;
                     case 's':
                         p = va_arg(ap, char *);
+                        //p = (char *)ap++;
                         PutString(vram,xsize,x+8*i, y, color, p);
                         break;                    
                     case 'x':

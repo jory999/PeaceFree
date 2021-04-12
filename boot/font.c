@@ -37,16 +37,23 @@ typedef int* va_list;
     return;
 }
 
-void PutString(char *vram, int xsize,int x,int y, int color, unsigned char *str111)//输出字符串，输出直到结尾为\0停止符
+void PutString(char *vram, int xsize,int x,int y, int color,  char *str111)//输出字符串，输出直到结尾为\0停止符
 {
      int i=0;
     //char *p=str111;
+
+     while(*str111 != '\0')
+     {
+        PutChar(vram,  xsize,x+8*i , y, *str111,color);//there are 2 pixels between char
+         i++;
+         str111++;
+     }
     
-     while(str111[i] != '\0')
+    /*  while(str111[i] != '\0')
      {
         PutChar(vram,  xsize,x+8*i , y, str111[i],color);//there are 2 pixels between char
          i++;
-     }
+     } */
 
 }
 
@@ -182,16 +189,19 @@ void PutIntHex(char *vram, int xsize,int x,int y,int color, int a)
       // printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, "some infomation you want tell end user");
   }
 
-int printaaa(char *vram, int xsize,int x, int y, int color, const char * format, ...)
+int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, ...)
+//int printaaa(char *vram, int xsize,int x, int y, int color, const (char *) &format, ...)
 {
    
 
     //binfo = (struct BOOTINFO1 * ) 0x0ff0;
-
+    char c;   
+    
    
-    char c;    
+     
     va_list ap;
     va_start(ap, format);
+    //va_start(ap, ppp);
     int i=0;
     while ((c = *format++) != '\0')
     {

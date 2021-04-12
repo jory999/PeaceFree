@@ -7,6 +7,7 @@
 .global FunctionLoadEflags, FunctionStoreEflags
 .global FunctionLidt
 .global asm_inthandler21,asm_inthandler27,asm_inthandler2c
+.global load_gdtr,load_idtr
 
 FunctionHlt:    #void FunctionHlt(void)
     hlt
@@ -122,7 +123,17 @@ asm_inthandler2c:
 		pop		%es
 		iretl
 
+load_gdtr:		# void load_gdtr(int limit, int addr);
+		movw	4(%ESP)	,    %AX	# limit
+		movw	%AX,          6(%ESP)
+		lgdt	6(%ESP)
+		ret
 
+load_idtr:		#void load_idtr(int limit, int addr);
+		MOV		4(%ESP),	 %AX	# limit
+		MOV		%AX ,        6(%ESP)
+		LIDT	 6(%ESP)
+		ret
  
 
 

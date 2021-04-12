@@ -35,13 +35,13 @@ setup.o : setup.s Makefile
 	as --32 -o setup.o setup.s	
 
 main.o : main.c Makefile
-	gcc -c main.c -o main.o -m32 -g 	
+	gcc -c main.c -o main.o -m32 -g    #-fno-plt	
 
 functions.o : functions.s Makefile
 	as --32 functions.s -o functions.o
 
 font.o : font.c  font.h Makefile 
-	gcc -c font.c  -o font.o -m32 -g  #-fno-stack-protector
+	gcc -c font.c  -o font.o -m32 -g #-fno-plt #-fno-stack-protector
 
 font_code.o : font_code.c font.h Makefile
 	gcc -c font_code.c -o font_code.o -m32	 -g

@@ -1,0 +1,1254 @@
+	.file	"main.c"
+# GNU C17 (Ubuntu 10.2.0-13ubuntu1) version 10.2.0 (x86_64-linux-gnu)
+#	compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version 4.1.0, MPC version 1.2.0-rc1, isl version isl-0.22.1-GMP
+
+# GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+# options passed:  -imultilib 32 -imultiarch i386-linux-gnu main.c -m32
+# -mtune=generic -march=i686 -auxbase-strip main.a -fverbose-asm
+# -fasynchronous-unwind-tables -fstack-protector-strong -Wformat
+# -Wformat-security -fstack-clash-protection -fcf-protection
+# options enabled:  -fPIC -fPIE -faggressive-loop-optimizations
+# -fallocation-dce -fasynchronous-unwind-tables -fauto-inc-dec
+# -fdelete-null-pointer-checks -fdwarf2-cfi-asm -fearly-inlining
+# -feliminate-unused-debug-symbols -feliminate-unused-debug-types
+# -ffp-int-builtin-inexact -ffunction-cse -fgcse-lm -fgnu-unique -fident
+# -finline-atomics -fipa-stack-alignment -fira-hoist-pressure
+# -fira-share-save-slots -fira-share-spill-slots -fivopts
+# -fkeep-static-consts -fleading-underscore -flifetime-dse -fmath-errno
+# -fmerge-debug-strings -fpcc-struct-return -fpeephole -fplt
+# -fprefetch-loop-arrays -fsched-critical-path-heuristic
+# -fsched-dep-count-heuristic -fsched-group-heuristic -fsched-interblock
+# -fsched-last-insn-heuristic -fsched-rank-heuristic -fsched-spec
+# -fsched-spec-insn-heuristic -fsched-stalled-insns-dep -fschedule-fusion
+# -fsemantic-interposition -fshow-column -fshrink-wrap-separate
+# -fsigned-zeros -fsplit-ivs-in-unroller -fssa-backprop
+# -fstack-clash-protection -fstack-protector-strong -fstdarg-opt
+# -fstrict-volatile-bitfields -fsync-libcalls -ftrapping-math -ftree-cselim
+# -ftree-forwprop -ftree-loop-if-convert -ftree-loop-im -ftree-loop-ivcanon
+# -ftree-loop-optimize -ftree-parallelize-loops= -ftree-phiprop
+# -ftree-reassoc -ftree-scev-cprop -funit-at-a-time -funwind-tables
+# -fverbose-asm -fzero-initialized-in-bss -m32 -m80387 -m96bit-long-double
+# -malign-stringops -mavx256-split-unaligned-load
+# -mavx256-split-unaligned-store -mfancy-math-387 -mfp-ret-in-387 -mglibc
+# -mieee-fp -mlong-double-80 -mno-red-zone -mno-sse4 -mpush-args -msahf
+# -mstv -mtls-direct-seg-refs -mvzeroupper
+
+	.text
+	.globl	putfont8
+	.type	putfont8, @function
+putfont8:
+.LFB0:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	subl	$20, %esp	#,
+	call	__x86.get_pc_thunk.ax	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %eax	# tmp82,
+	movl	24(%ebp), %eax	# c, tmp111
+	movb	%al, -20(%ebp)	# tmp112, c
+# main.c:56: 	for (i = 0; i < 16; i++) {
+	movl	$0, -8(%ebp)	#, i
+# main.c:56: 	for (i = 0; i < 16; i++) {
+	jmp	.L2	#
+.L11:
+# main.c:57: 		p = vram + (y + i) * xsize + x;
+	movl	20(%ebp), %edx	# y, tmp113
+	movl	-8(%ebp), %eax	# i, tmp114
+	addl	%edx, %eax	# tmp113, _1
+# main.c:57: 		p = vram + (y + i) * xsize + x;
+	imull	12(%ebp), %eax	# xsize, _2
+	movl	%eax, %edx	# _2, _3
+# main.c:57: 		p = vram + (y + i) * xsize + x;
+	movl	16(%ebp), %eax	# x, x.0_4
+	addl	%eax, %edx	# x.0_4, _5
+# main.c:57: 		p = vram + (y + i) * xsize + x;
+	movl	8(%ebp), %eax	# vram, tmp118
+	addl	%edx, %eax	# _5, tmp117
+	movl	%eax, -4(%ebp)	# tmp117, p
+# main.c:58: 		d = font[i];
+	movl	-8(%ebp), %edx	# i, i.1_6
+	movl	28(%ebp), %eax	# font, tmp119
+	addl	%edx, %eax	# i.1_6, _7
+# main.c:58: 		d = font[i];
+	movzbl	(%eax), %eax	# *_7, tmp120
+	movb	%al, -9(%ebp)	# tmp120, d
+# main.c:59: 		if ((d & 0x80) != 0) { p[0] = c; }
+	cmpb	$0, -9(%ebp)	#, d
+	jns	.L3	#,
+# main.c:59: 		if ((d & 0x80) != 0) { p[0] = c; }
+	movl	-4(%ebp), %eax	# p, tmp121
+	movzbl	-20(%ebp), %edx	# c, tmp122
+	movb	%dl, (%eax)	# tmp122, *p_45
+.L3:
+# main.c:60: 		if ((d & 0x40) != 0) { p[1] = c; }
+	movsbl	-9(%ebp), %eax	# d, _8
+	andl	$64, %eax	#, _9
+# main.c:60: 		if ((d & 0x40) != 0) { p[1] = c; }
+	testl	%eax, %eax	# _9
+	je	.L4	#,
+# main.c:60: 		if ((d & 0x40) != 0) { p[1] = c; }
+	movl	-4(%ebp), %eax	# p, tmp123
+	leal	1(%eax), %edx	#, _10
+# main.c:60: 		if ((d & 0x40) != 0) { p[1] = c; }
+	movzbl	-20(%ebp), %eax	# c, tmp124
+	movb	%al, (%edx)	# tmp124, *_10
+.L4:
+# main.c:61: 		if ((d & 0x20) != 0) { p[2] = c; }
+	movsbl	-9(%ebp), %eax	# d, _11
+	andl	$32, %eax	#, _12
+# main.c:61: 		if ((d & 0x20) != 0) { p[2] = c; }
+	testl	%eax, %eax	# _12
+	je	.L5	#,
+# main.c:61: 		if ((d & 0x20) != 0) { p[2] = c; }
+	movl	-4(%ebp), %eax	# p, tmp125
+	leal	2(%eax), %edx	#, _13
+# main.c:61: 		if ((d & 0x20) != 0) { p[2] = c; }
+	movzbl	-20(%ebp), %eax	# c, tmp126
+	movb	%al, (%edx)	# tmp126, *_13
+.L5:
+# main.c:62: 		if ((d & 0x10) != 0) { p[3] = c; }
+	movsbl	-9(%ebp), %eax	# d, _14
+	andl	$16, %eax	#, _15
+# main.c:62: 		if ((d & 0x10) != 0) { p[3] = c; }
+	testl	%eax, %eax	# _15
+	je	.L6	#,
+# main.c:62: 		if ((d & 0x10) != 0) { p[3] = c; }
+	movl	-4(%ebp), %eax	# p, tmp127
+	leal	3(%eax), %edx	#, _16
+# main.c:62: 		if ((d & 0x10) != 0) { p[3] = c; }
+	movzbl	-20(%ebp), %eax	# c, tmp128
+	movb	%al, (%edx)	# tmp128, *_16
+.L6:
+# main.c:63: 		if ((d & 0x08) != 0) { p[4] = c; }
+	movsbl	-9(%ebp), %eax	# d, _17
+	andl	$8, %eax	#, _18
+# main.c:63: 		if ((d & 0x08) != 0) { p[4] = c; }
+	testl	%eax, %eax	# _18
+	je	.L7	#,
+# main.c:63: 		if ((d & 0x08) != 0) { p[4] = c; }
+	movl	-4(%ebp), %eax	# p, tmp129
+	leal	4(%eax), %edx	#, _19
+# main.c:63: 		if ((d & 0x08) != 0) { p[4] = c; }
+	movzbl	-20(%ebp), %eax	# c, tmp130
+	movb	%al, (%edx)	# tmp130, *_19
+.L7:
+# main.c:64: 		if ((d & 0x04) != 0) { p[5] = c; }
+	movsbl	-9(%ebp), %eax	# d, _20
+	andl	$4, %eax	#, _21
+# main.c:64: 		if ((d & 0x04) != 0) { p[5] = c; }
+	testl	%eax, %eax	# _21
+	je	.L8	#,
+# main.c:64: 		if ((d & 0x04) != 0) { p[5] = c; }
+	movl	-4(%ebp), %eax	# p, tmp131
+	leal	5(%eax), %edx	#, _22
+# main.c:64: 		if ((d & 0x04) != 0) { p[5] = c; }
+	movzbl	-20(%ebp), %eax	# c, tmp132
+	movb	%al, (%edx)	# tmp132, *_22
+.L8:
+# main.c:65: 		if ((d & 0x02) != 0) { p[6] = c; }
+	movsbl	-9(%ebp), %eax	# d, _23
+	andl	$2, %eax	#, _24
+# main.c:65: 		if ((d & 0x02) != 0) { p[6] = c; }
+	testl	%eax, %eax	# _24
+	je	.L9	#,
+# main.c:65: 		if ((d & 0x02) != 0) { p[6] = c; }
+	movl	-4(%ebp), %eax	# p, tmp133
+	leal	6(%eax), %edx	#, _25
+# main.c:65: 		if ((d & 0x02) != 0) { p[6] = c; }
+	movzbl	-20(%ebp), %eax	# c, tmp134
+	movb	%al, (%edx)	# tmp134, *_25
+.L9:
+# main.c:66: 		if ((d & 0x01) != 0) { p[7] = c; }
+	movsbl	-9(%ebp), %eax	# d, _26
+	andl	$1, %eax	#, _27
+# main.c:66: 		if ((d & 0x01) != 0) { p[7] = c; }
+	testl	%eax, %eax	# _27
+	je	.L10	#,
+# main.c:66: 		if ((d & 0x01) != 0) { p[7] = c; }
+	movl	-4(%ebp), %eax	# p, tmp135
+	leal	7(%eax), %edx	#, _28
+# main.c:66: 		if ((d & 0x01) != 0) { p[7] = c; }
+	movzbl	-20(%ebp), %eax	# c, tmp136
+	movb	%al, (%edx)	# tmp136, *_28
+.L10:
+# main.c:56: 	for (i = 0; i < 16; i++) {
+	addl	$1, -8(%ebp)	#, i
+.L2:
+# main.c:56: 	for (i = 0; i < 16; i++) {
+	cmpl	$15, -8(%ebp)	#, i
+	jle	.L11	#,
+# main.c:68: 	return;
+	nop	
+# main.c:69: }
+	leave	
+	.cfi_restore 5
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE0:
+	.size	putfont8, .-putfont8
+	.globl	putfonts8_asc
+	.type	putfonts8_asc, @function
+putfonts8_asc:
+.LFB1:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	pushl	%ebx	#
+	subl	$4, %esp	#,
+	.cfi_offset 3, -12
+	call	__x86.get_pc_thunk.bx	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp82,
+	movl	24(%ebp), %eax	# c, tmp89
+	movb	%al, -8(%ebp)	# tmp90, c
+# main.c:88: 	for (; *s != 0x00; s++) {
+	jmp	.L14	#
+.L15:
+# main.c:89: 		putfont8(vram, xsize, x, y, c, font_code_global[ *s - 0x21]);
+	movl	28(%ebp), %eax	# s, tmp91
+	movzbl	(%eax), %eax	# *s_8, _1
+	movzbl	%al, %eax	# _1, _2
+# main.c:89: 		putfont8(vram, xsize, x, y, c, font_code_global[ *s - 0x21]);
+	subl	$33, %eax	#, _3
+# main.c:89: 		putfont8(vram, xsize, x, y, c, font_code_global[ *s - 0x21]);
+	sall	$4, %eax	#, _3
+	movl	%eax, %edx	# _3, tmp92
+	movl	font_code_global@GOT(%ebx), %eax	#, tmp94
+	addl	%eax, %edx	# tmp93, _4
+# main.c:89: 		putfont8(vram, xsize, x, y, c, font_code_global[ *s - 0x21]);
+	movsbl	-8(%ebp), %eax	# c, _5
+	pushl	%edx	# _4
+	pushl	%eax	# _5
+	pushl	20(%ebp)	# y
+	pushl	16(%ebp)	# x
+	pushl	12(%ebp)	# xsize
+	pushl	8(%ebp)	# vram
+	call	putfont8	#
+	addl	$24, %esp	#,
+# main.c:90: 		x += 8;
+	addl	$8, 16(%ebp)	#, x
+# main.c:88: 	for (; *s != 0x00; s++) {
+	addl	$1, 28(%ebp)	#, s
+.L14:
+# main.c:88: 	for (; *s != 0x00; s++) {
+	movl	28(%ebp), %eax	# s, tmp95
+	movzbl	(%eax), %eax	# *s_8, _6
+# main.c:88: 	for (; *s != 0x00; s++) {
+	testb	%al, %al	# _6
+	jne	.L15	#,
+# main.c:92: 	return;
+	nop	
+# main.c:93: }
+	movl	-4(%ebp), %ebx	#,
+	leave	
+	.cfi_restore 5
+	.cfi_restore 3
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE1:
+	.size	putfonts8_asc, .-putfonts8_asc
+	.globl	init_mouse_cursor8
+	.type	init_mouse_cursor8, @function
+init_mouse_cursor8:
+.LFB2:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	subl	$20, %esp	#,
+	call	__x86.get_pc_thunk.ax	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %eax	# tmp82,
+	movl	12(%ebp), %edx	# bc, tmp98
+	movb	%dl, -20(%ebp)	# tmp99, bc
+# main.c:120: 	for (y = 0; y < 16; y++) {
+	movl	$0, -4(%ebp)	#, y
+# main.c:120: 	for (y = 0; y < 16; y++) {
+	jmp	.L18	#
+.L24:
+# main.c:121: 		for (x = 0; x < 16; x++) {
+	movl	$0, -8(%ebp)	#, x
+# main.c:121: 		for (x = 0; x < 16; x++) {
+	jmp	.L19	#
+.L23:
+# main.c:122: 			if (cursor[y][x] == '*') {
+	movl	cursor@GOT(%eax), %ecx	#, tmp100
+	movl	-4(%ebp), %edx	# y, tmp101
+	sall	$4, %edx	#, tmp102
+	addl	%edx, %ecx	# tmp102, tmp103
+	movl	-8(%ebp), %edx	# x, tmp105
+	addl	%ecx, %edx	# tmp103, tmp104
+	movzbl	(%edx), %edx	# cursor[y_17][x_16], _1
+# main.c:122: 			if (cursor[y][x] == '*') {
+	cmpb	$42, %dl	#, _1
+	jne	.L20	#,
+# main.c:123: 				mouse[y * 16 + x] = COL8_000000;
+	movl	-4(%ebp), %edx	# y, tmp106
+	movl	%edx, %ecx	# tmp106, tmp106
+	sall	$4, %ecx	#, tmp106
+# main.c:123: 				mouse[y * 16 + x] = COL8_000000;
+	movl	-8(%ebp), %edx	# x, tmp107
+	addl	%ecx, %edx	# _2, _3
+	movl	%edx, %ecx	# _3, _4
+# main.c:123: 				mouse[y * 16 + x] = COL8_000000;
+	movl	8(%ebp), %edx	# mouse, tmp108
+	addl	%ecx, %edx	# _4, _5
+# main.c:123: 				mouse[y * 16 + x] = COL8_000000;
+	movb	$0, (%edx)	#, *_5
+.L20:
+# main.c:125: 			if (cursor[y][x] == 'O') {
+	movl	cursor@GOT(%eax), %ecx	#, tmp109
+	movl	-4(%ebp), %edx	# y, tmp110
+	sall	$4, %edx	#, tmp111
+	addl	%edx, %ecx	# tmp111, tmp112
+	movl	-8(%ebp), %edx	# x, tmp114
+	addl	%ecx, %edx	# tmp112, tmp113
+	movzbl	(%edx), %edx	# cursor[y_17][x_16], _6
+# main.c:125: 			if (cursor[y][x] == 'O') {
+	cmpb	$79, %dl	#, _6
+	jne	.L21	#,
+# main.c:126: 				mouse[y * 16 + x] = COL8_FFFFFF;
+	movl	-4(%ebp), %edx	# y, tmp115
+	movl	%edx, %ecx	# tmp115, tmp115
+	sall	$4, %ecx	#, tmp115
+# main.c:126: 				mouse[y * 16 + x] = COL8_FFFFFF;
+	movl	-8(%ebp), %edx	# x, tmp116
+	addl	%ecx, %edx	# _7, _8
+	movl	%edx, %ecx	# _8, _9
+# main.c:126: 				mouse[y * 16 + x] = COL8_FFFFFF;
+	movl	8(%ebp), %edx	# mouse, tmp117
+	addl	%ecx, %edx	# _9, _10
+# main.c:126: 				mouse[y * 16 + x] = COL8_FFFFFF;
+	movb	$7, (%edx)	#, *_10
+.L21:
+# main.c:128: 			if (cursor[y][x] == '.') {
+	movl	cursor@GOT(%eax), %ecx	#, tmp118
+	movl	-4(%ebp), %edx	# y, tmp119
+	sall	$4, %edx	#, tmp120
+	addl	%edx, %ecx	# tmp120, tmp121
+	movl	-8(%ebp), %edx	# x, tmp123
+	addl	%ecx, %edx	# tmp121, tmp122
+	movzbl	(%edx), %edx	# cursor[y_17][x_16], _11
+# main.c:128: 			if (cursor[y][x] == '.') {
+	cmpb	$46, %dl	#, _11
+	jne	.L22	#,
+# main.c:129: 				mouse[y * 16 + x] = bc;
+	movl	-4(%ebp), %edx	# y, tmp124
+	movl	%edx, %ecx	# tmp124, tmp124
+	sall	$4, %ecx	#, tmp124
+# main.c:129: 				mouse[y * 16 + x] = bc;
+	movl	-8(%ebp), %edx	# x, tmp125
+	addl	%ecx, %edx	# _12, _13
+	movl	%edx, %ecx	# _13, _14
+# main.c:129: 				mouse[y * 16 + x] = bc;
+	movl	8(%ebp), %edx	# mouse, tmp126
+	addl	%edx, %ecx	# tmp126, _15
+# main.c:129: 				mouse[y * 16 + x] = bc;
+	movzbl	-20(%ebp), %edx	# bc, tmp127
+	movb	%dl, (%ecx)	# tmp127, *_15
+.L22:
+# main.c:121: 		for (x = 0; x < 16; x++) {
+	addl	$1, -8(%ebp)	#, x
+.L19:
+# main.c:121: 		for (x = 0; x < 16; x++) {
+	cmpl	$15, -8(%ebp)	#, x
+	jle	.L23	#,
+# main.c:120: 	for (y = 0; y < 16; y++) {
+	addl	$1, -4(%ebp)	#, y
+.L18:
+# main.c:120: 	for (y = 0; y < 16; y++) {
+	cmpl	$15, -4(%ebp)	#, y
+	jle	.L24	#,
+# main.c:133: 	return;
+	nop	
+# main.c:134: }
+	leave	
+	.cfi_restore 5
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE2:
+	.size	init_mouse_cursor8, .-init_mouse_cursor8
+	.globl	putblock8_8
+	.type	putblock8_8, @function
+putblock8_8:
+.LFB3:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	pushl	%ebx	#
+	subl	$16, %esp	#,
+	.cfi_offset 3, -12
+	call	__x86.get_pc_thunk.ax	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %eax	# tmp82,
+# main.c:140: 	for (y = 0; y < pysize; y++) {
+	movl	$0, -8(%ebp)	#, y
+# main.c:140: 	for (y = 0; y < pysize; y++) {
+	jmp	.L27	#
+.L30:
+# main.c:141: 		for (x = 0; x < pxsize; x++) {
+	movl	$0, -12(%ebp)	#, x
+# main.c:141: 		for (x = 0; x < pxsize; x++) {
+	jmp	.L28	#
+.L29:
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	movl	-8(%ebp), %eax	# y, tmp94
+	imull	36(%ebp), %eax	# bxsize, tmp94
+	movl	%eax, %edx	# tmp94, _1
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	movl	-12(%ebp), %eax	# x, tmp95
+	addl	%edx, %eax	# _1, _2
+	movl	%eax, %edx	# _2, _3
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	movl	32(%ebp), %eax	# buf, tmp96
+	addl	%edx, %eax	# _3, _4
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	movl	28(%ebp), %ecx	# py0, tmp97
+	movl	-8(%ebp), %edx	# y, tmp98
+	addl	%ecx, %edx	# tmp97, _5
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	imull	12(%ebp), %edx	# vxsize, _6
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	movl	24(%ebp), %ebx	# px0, tmp99
+	movl	-12(%ebp), %ecx	# x, tmp100
+	addl	%ebx, %ecx	# tmp99, _7
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	addl	%ecx, %edx	# _7, _8
+	movl	%edx, %ecx	# _8, _9
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	movl	8(%ebp), %edx	# vram, tmp101
+	addl	%ecx, %edx	# _9, _10
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	movzbl	(%eax), %eax	# *_4, _11
+# main.c:142: 			vram[(py0 + y) * vxsize + (px0 + x)] = buf[y * bxsize + x];
+	movb	%al, (%edx)	# _11, *_10
+# main.c:141: 		for (x = 0; x < pxsize; x++) {
+	addl	$1, -12(%ebp)	#, x
+.L28:
+# main.c:141: 		for (x = 0; x < pxsize; x++) {
+	movl	-12(%ebp), %eax	# x, tmp102
+	cmpl	16(%ebp), %eax	# pxsize, tmp102
+	jl	.L29	#,
+# main.c:140: 	for (y = 0; y < pysize; y++) {
+	addl	$1, -8(%ebp)	#, y
+.L27:
+# main.c:140: 	for (y = 0; y < pysize; y++) {
+	movl	-8(%ebp), %eax	# y, tmp103
+	cmpl	20(%ebp), %eax	# pysize, tmp103
+	jl	.L30	#,
+# main.c:145: 	return;
+	nop	
+# main.c:146: }
+	movl	-4(%ebp), %ebx	#,
+	leave	
+	.cfi_restore 5
+	.cfi_restore 3
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE3:
+	.size	putblock8_8, .-putblock8_8
+	.section	.rodata
+	.align 4
+.LC0:
+	.string	"GOD Will Bless My Family Amen%s"
+	.text
+	.globl	SysMain
+	.type	SysMain, @function
+SysMain:
+.LFB4:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	pushl	%ebx	#
+	subl	$292, %esp	#,
+	.cfi_offset 3, -12
+	call	__x86.get_pc_thunk.bx	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp82,
+# main.c:155: {
+	movl	%gs:20, %eax	# MEM[(<address-space-2> unsigned int *)20B], tmp126
+	movl	%eax, -12(%ebp)	# tmp126, D.1786
+	xorl	%eax, %eax	# tmp126
+# main.c:160:     binfo = (struct BOOTINFO * ) 0x0ff0;
+	movl	$4080, -292(%ebp)	#, binfo
+# main.c:161:     xsize = (*binfo).scrnx;
+	movl	-292(%ebp), %eax	# binfo, tmp102
+	movzwl	4(%eax), %eax	# binfo_20->scrnx, _1
+# main.c:161:     xsize = (*binfo).scrnx;
+	cwtl
+	movl	%eax, -288(%ebp)	# tmp103, xsize
+# main.c:162:     ysize = (*binfo).scrny;
+	movl	-292(%ebp), %eax	# binfo, tmp104
+	movzwl	6(%eax), %eax	# binfo_20->scrny, _2
+# main.c:162:     ysize = (*binfo).scrny;
+	cwtl
+	movl	%eax, -284(%ebp)	# tmp105, ysize
+# main.c:163:     vram  = (*binfo).vram;
+	movl	-292(%ebp), %eax	# binfo, tmp106
+	movl	8(%eax), %eax	# binfo_20->vram, tmp107
+	movl	%eax, -280(%ebp)	# tmp107, vram
+# main.c:168:     InitPalette();
+	call	InitPalette	#
+# main.c:169:     init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
+	movl	-292(%ebp), %eax	# binfo, tmp108
+	movzwl	6(%eax), %eax	# binfo_20->scrny, _3
+# main.c:169:     init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
+	movswl	%ax, %ecx	# _3, _4
+# main.c:169:     init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
+	movl	-292(%ebp), %eax	# binfo, tmp109
+	movzwl	4(%eax), %eax	# binfo_20->scrnx, _5
+# main.c:169:     init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
+	movswl	%ax, %edx	# _5, _6
+	movl	-292(%ebp), %eax	# binfo, tmp110
+	movl	8(%eax), %eax	# binfo_20->vram, _7
+	subl	$4, %esp	#,
+	pushl	%ecx	# _4
+	pushl	%edx	# _6
+	pushl	%eax	# _7
+	call	init_screen	#
+	addl	$16, %esp	#,
+# main.c:171:     mx = (binfo->scrnx - 16) / 2; /* 计算画面的中心坐标*/
+	movl	-292(%ebp), %eax	# binfo, tmp111
+	movzwl	4(%eax), %eax	# binfo_20->scrnx, _8
+	cwtl
+# main.c:171:     mx = (binfo->scrnx - 16) / 2; /* 计算画面的中心坐标*/
+	subl	$16, %eax	#, _10
+# main.c:171:     mx = (binfo->scrnx - 16) / 2; /* 计算画面的中心坐标*/
+	movl	%eax, %edx	# _10, tmp112
+	shrl	$31, %edx	#, tmp112
+	addl	%edx, %eax	# tmp112, tmp113
+	sarl	%eax	# tmp114
+	movl	%eax, -276(%ebp)	# tmp114, mx
+# main.c:172: 	my = (binfo->scrny - 28 - 16) / 2;
+	movl	-292(%ebp), %eax	# binfo, tmp115
+	movzwl	6(%eax), %eax	# binfo_20->scrny, _11
+	cwtl
+# main.c:172: 	my = (binfo->scrny - 28 - 16) / 2;
+	subl	$44, %eax	#, _13
+# main.c:172: 	my = (binfo->scrny - 28 - 16) / 2;
+	movl	%eax, %edx	# _13, tmp116
+	shrl	$31, %edx	#, tmp116
+	addl	%edx, %eax	# tmp116, tmp117
+	sarl	%eax	# tmp118
+	movl	%eax, -272(%ebp)	# tmp118, my
+# main.c:173: 	init_mouse_cursor8(mcursor, COL8_008484);
+	subl	$8, %esp	#,
+	pushl	$14	#
+	leal	-268(%ebp), %eax	#, tmp119
+	pushl	%eax	# tmp119
+	call	init_mouse_cursor8	#
+	addl	$16, %esp	#,
+# main.c:174: 	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
+	movl	-292(%ebp), %eax	# binfo, tmp120
+	movzwl	4(%eax), %eax	# binfo_20->scrnx, _14
+# main.c:174: 	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
+	movswl	%ax, %edx	# _14, _15
+	movl	-292(%ebp), %eax	# binfo, tmp121
+	movl	8(%eax), %eax	# binfo_20->vram, _16
+	pushl	$16	#
+	leal	-268(%ebp), %ecx	#, tmp122
+	pushl	%ecx	# tmp122
+	pushl	-272(%ebp)	# my
+	pushl	-276(%ebp)	# mx
+	pushl	$16	#
+	pushl	$16	#
+	pushl	%edx	# _15
+	pushl	%eax	# _16
+	call	putblock8_8	#
+	addl	$32, %esp	#,
+# main.c:205:    InitIDT();
+	call	InitIDT@PLT	#
+# main.c:206:    InitPIC();
+	call	InitPIC	#
+# main.c:208:    FunctionOut8(0x0021, 0xf9); /* 开放PIC1和键盘中断(11111001) */
+	subl	$8, %esp	#,
+	pushl	$249	#
+	pushl	$33	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:209:    FunctionOut8(0x00a1, 0xef); /* 开放鼠标中断(11101111) */
+	subl	$8, %esp	#,
+	pushl	$239	#
+	pushl	$161	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:220: 	  printaaa(binfo->vram, binfo->scrnx, 20, 50, 7,"GOD Will Bless My Family Amen%s" );
+	movl	-292(%ebp), %eax	# binfo, tmp123
+	movzwl	4(%eax), %eax	# binfo_20->scrnx, _17
+# main.c:220: 	  printaaa(binfo->vram, binfo->scrnx, 20, 50, 7,"GOD Will Bless My Family Amen%s" );
+	movswl	%ax, %edx	# _17, _18
+	movl	-292(%ebp), %eax	# binfo, tmp124
+	movl	8(%eax), %eax	# binfo_20->vram, _19
+	subl	$8, %esp	#,
+	leal	.LC0@GOTOFF(%ebx), %ecx	#, tmp125
+	pushl	%ecx	# tmp125
+	pushl	$7	#
+	pushl	$50	#
+	pushl	$20	#
+	pushl	%edx	# _18
+	pushl	%eax	# _19
+	call	printaaa@PLT	#
+	addl	$32, %esp	#,
+.L33:
+# main.c:224:     while(1);
+	jmp	.L33	#
+	.cfi_endproc
+.LFE4:
+	.size	SysMain, .-SysMain
+	.globl	InitPalette
+	.type	InitPalette, @function
+InitPalette:
+.LFB5:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	subl	$8, %esp	#,
+	call	__x86.get_pc_thunk.ax	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %eax	# tmp82,
+# main.c:231: 	set_palette(0, 15, table_rgb);
+	subl	$4, %esp	#,
+	movl	table_rgb@GOT(%eax), %eax	#, tmp84
+	pushl	%eax	# tmp83
+	pushl	$15	#
+	pushl	$0	#
+	call	set_palette	#
+	addl	$16, %esp	#,
+# main.c:232: 	return;
+	nop	
+# main.c:235: }
+	leave	
+	.cfi_restore 5
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE5:
+	.size	InitPalette, .-InitPalette
+	.globl	set_palette
+	.type	set_palette, @function
+set_palette:
+.LFB6:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	pushl	%ebx	#
+	subl	$20, %esp	#,
+	.cfi_offset 3, -12
+	call	__x86.get_pc_thunk.bx	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp82,
+# main.c:240: 	eflags = FunctionLoadEflags();	/* 记录中断许可标志的值 */
+	call	FunctionLoadEflags@PLT	#
+	movl	%eax, -12(%ebp)	# tmp94, eflags
+# main.c:241: 	FunctionCli(); 					/* 将中断许可标志置为0,禁止中断 */
+	call	FunctionCli@PLT	#
+# main.c:242: 	FunctionOut8(0x03c8, start);
+	subl	$8, %esp	#,
+	pushl	8(%ebp)	# start
+	pushl	$968	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:243: 	for (i = start; i <= end; i++) {
+	movl	8(%ebp), %eax	# start, tmp95
+	movl	%eax, -16(%ebp)	# tmp95, i
+# main.c:243: 	for (i = start; i <= end; i++) {
+	jmp	.L38	#
+.L39:
+# main.c:244: 		FunctionOut8(0x03c9, rgb[0] / 4);
+	movl	16(%ebp), %eax	# rgb, tmp96
+	movzbl	(%eax), %eax	# *rgb_12, _1
+# main.c:244: 		FunctionOut8(0x03c9, rgb[0] / 4);
+	shrb	$2, %al	#, _2
+	movzbl	%al, %eax	# _2, _3
+	subl	$8, %esp	#,
+	pushl	%eax	# _3
+	pushl	$969	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:245: 		FunctionOut8(0x03c9, rgb[1] / 4);
+	movl	16(%ebp), %eax	# rgb, tmp97
+	addl	$1, %eax	#, _4
+	movzbl	(%eax), %eax	# *_4, _5
+# main.c:245: 		FunctionOut8(0x03c9, rgb[1] / 4);
+	shrb	$2, %al	#, _6
+	movzbl	%al, %eax	# _6, _7
+	subl	$8, %esp	#,
+	pushl	%eax	# _7
+	pushl	$969	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:246: 		FunctionOut8(0x03c9, rgb[2] / 4);
+	movl	16(%ebp), %eax	# rgb, tmp98
+	addl	$2, %eax	#, _8
+	movzbl	(%eax), %eax	# *_8, _9
+# main.c:246: 		FunctionOut8(0x03c9, rgb[2] / 4);
+	shrb	$2, %al	#, _10
+	movzbl	%al, %eax	# _10, _11
+	subl	$8, %esp	#,
+	pushl	%eax	# _11
+	pushl	$969	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:247: 		rgb += 3;
+	addl	$3, 16(%ebp)	#, rgb
+# main.c:243: 	for (i = start; i <= end; i++) {
+	addl	$1, -16(%ebp)	#, i
+.L38:
+# main.c:243: 	for (i = start; i <= end; i++) {
+	movl	-16(%ebp), %eax	# i, tmp99
+	cmpl	12(%ebp), %eax	# end, tmp99
+	jle	.L39	#,
+# main.c:249: 	FunctionStoreEflags(eflags);	/* 复原中断许可标志 */
+	subl	$12, %esp	#,
+	pushl	-12(%ebp)	# eflags
+	call	FunctionStoreEflags@PLT	#
+	addl	$16, %esp	#,
+# main.c:250: 	return;
+	nop	
+# main.c:251: }
+	movl	-4(%ebp), %ebx	#,
+	leave	
+	.cfi_restore 5
+	.cfi_restore 3
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE6:
+	.size	set_palette, .-set_palette
+	.globl	DrawRectangle
+	.type	DrawRectangle, @function
+DrawRectangle:
+.LFB7:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	subl	$16, %esp	#,
+	call	__x86.get_pc_thunk.ax	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %eax	# tmp82,
+# main.c:259:     for (i=y1;i<=y2;i++)
+	movl	12(%ebp), %eax	# y1, tmp87
+	movl	%eax, -12(%ebp)	# tmp87, i
+# main.c:259:     for (i=y1;i<=y2;i++)
+	jmp	.L42	#
+.L45:
+# main.c:262:         for (j=x1;j<=x2;j++)
+	movl	8(%ebp), %eax	# x1, tmp88
+	movl	%eax, -8(%ebp)	# tmp88, j
+# main.c:262:         for (j=x1;j<=x2;j++)
+	jmp	.L43	#
+.L44:
+# main.c:264:             p = (char*)(0xa0000 + 320 * i + j);
+	movl	-12(%ebp), %edx	# i, tmp89
+	movl	%edx, %eax	# tmp89, tmp90
+	sall	$2, %eax	#, tmp90
+	addl	%edx, %eax	# tmp89, tmp90
+	sall	$6, %eax	#, tmp91
+# main.c:264:             p = (char*)(0xa0000 + 320 * i + j);
+	leal	655360(%eax), %edx	#, _2
+# main.c:264:             p = (char*)(0xa0000 + 320 * i + j);
+	movl	-8(%ebp), %eax	# j, tmp92
+	addl	%edx, %eax	# _2, _3
+# main.c:264:             p = (char*)(0xa0000 + 320 * i + j);
+	movl	%eax, -4(%ebp)	# _3, p
+# main.c:266:             *p = color;
+	movl	24(%ebp), %eax	# color, tmp93
+	movl	%eax, %edx	# tmp93, _4
+	movl	-4(%ebp), %eax	# p, tmp94
+	movb	%dl, (%eax)	# _4, *p_17
+# main.c:262:         for (j=x1;j<=x2;j++)
+	addl	$1, -8(%ebp)	#, j
+.L43:
+# main.c:262:         for (j=x1;j<=x2;j++)
+	movl	-8(%ebp), %eax	# j, tmp95
+	cmpl	16(%ebp), %eax	# x2, tmp95
+	jle	.L44	#,
+# main.c:259:     for (i=y1;i<=y2;i++)
+	addl	$1, -12(%ebp)	#, i
+.L42:
+# main.c:259:     for (i=y1;i<=y2;i++)
+	movl	-12(%ebp), %eax	# i, tmp96
+	cmpl	20(%ebp), %eax	# y2, tmp96
+	jle	.L45	#,
+# main.c:269:     return;
+	nop	
+# main.c:270: } 
+	leave	
+	.cfi_restore 5
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE7:
+	.size	DrawRectangle, .-DrawRectangle
+	.globl	boxfill8
+	.type	boxfill8, @function
+boxfill8:
+.LFB8:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	subl	$20, %esp	#,
+	call	__x86.get_pc_thunk.ax	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %eax	# tmp82,
+	movl	16(%ebp), %eax	# c, tmp87
+	movb	%al, -20(%ebp)	# tmp88, c
+# main.c:275: 	for (y = y0; y <= y1; y++) {
+	movl	24(%ebp), %eax	# y0, tmp89
+	movl	%eax, -4(%ebp)	# tmp89, y
+# main.c:275: 	for (y = y0; y <= y1; y++) {
+	jmp	.L48	#
+.L51:
+# main.c:276: 		for (x = x0; x <= x1; x++)
+	movl	20(%ebp), %eax	# x0, tmp90
+	movl	%eax, -8(%ebp)	# tmp90, x
+# main.c:276: 		for (x = x0; x <= x1; x++)
+	jmp	.L49	#
+.L50:
+# main.c:277: 			vram[y * xsize + x] = c;
+	movl	-4(%ebp), %eax	# y, tmp91
+	imull	12(%ebp), %eax	# xsize, tmp91
+	movl	%eax, %edx	# tmp91, _1
+# main.c:277: 			vram[y * xsize + x] = c;
+	movl	-8(%ebp), %eax	# x, tmp92
+	addl	%edx, %eax	# _1, _2
+	movl	%eax, %edx	# _2, _3
+# main.c:277: 			vram[y * xsize + x] = c;
+	movl	8(%ebp), %eax	# vram, tmp93
+	addl	%eax, %edx	# tmp93, _4
+# main.c:277: 			vram[y * xsize + x] = c;
+	movzbl	-20(%ebp), %eax	# c, tmp94
+	movb	%al, (%edx)	# tmp94, *_4
+# main.c:276: 		for (x = x0; x <= x1; x++)
+	addl	$1, -8(%ebp)	#, x
+.L49:
+# main.c:276: 		for (x = x0; x <= x1; x++)
+	movl	-8(%ebp), %eax	# x, tmp95
+	cmpl	28(%ebp), %eax	# x1, tmp95
+	jle	.L50	#,
+# main.c:275: 	for (y = y0; y <= y1; y++) {
+	addl	$1, -4(%ebp)	#, y
+.L48:
+# main.c:275: 	for (y = y0; y <= y1; y++) {
+	movl	-4(%ebp), %eax	# y, tmp96
+	cmpl	32(%ebp), %eax	# y1, tmp96
+	jle	.L51	#,
+# main.c:279: 	return;
+	nop	
+# main.c:280: }
+	leave	
+	.cfi_restore 5
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE8:
+	.size	boxfill8, .-boxfill8
+	.globl	init_screen
+	.type	init_screen, @function
+init_screen:
+.LFB9:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	pushl	%ebx	#
+	.cfi_offset 3, -12
+	call	__x86.get_pc_thunk.ax	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %eax	# tmp82,
+# main.c:284: 	boxfill8(vram, x, COL8_008484,  0,     0,      x -  1, y - 29);
+	movl	16(%ebp), %eax	# y, tmp122
+	leal	-29(%eax), %edx	#, _1
+	movl	12(%ebp), %eax	# x, tmp123
+	subl	$1, %eax	#, _2
+	pushl	%edx	# _1
+	pushl	%eax	# _2
+	pushl	$0	#
+	pushl	$0	#
+	pushl	$14	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:285: 	boxfill8(vram, x, COL8_C6C6C6,  0,     y - 28, x -  1, y - 28);
+	movl	16(%ebp), %eax	# y, tmp124
+	leal	-28(%eax), %ecx	#, _3
+	movl	12(%ebp), %eax	# x, tmp125
+	leal	-1(%eax), %edx	#, _4
+	movl	16(%ebp), %eax	# y, tmp126
+	subl	$28, %eax	#, _5
+	pushl	%ecx	# _3
+	pushl	%edx	# _4
+	pushl	%eax	# _5
+	pushl	$0	#
+	pushl	$8	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:286: 	boxfill8(vram, x, COL8_FFFFFF,  0,     y - 27, x -  1, y - 27);
+	movl	16(%ebp), %eax	# y, tmp127
+	leal	-27(%eax), %ecx	#, _6
+	movl	12(%ebp), %eax	# x, tmp128
+	leal	-1(%eax), %edx	#, _7
+	movl	16(%ebp), %eax	# y, tmp129
+	subl	$27, %eax	#, _8
+	pushl	%ecx	# _6
+	pushl	%edx	# _7
+	pushl	%eax	# _8
+	pushl	$0	#
+	pushl	$7	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:287: 	boxfill8(vram, x, COL8_C6C6C6,  0,     y - 26, x -  1, y -  1);
+	movl	16(%ebp), %eax	# y, tmp130
+	leal	-1(%eax), %ecx	#, _9
+	movl	12(%ebp), %eax	# x, tmp131
+	leal	-1(%eax), %edx	#, _10
+	movl	16(%ebp), %eax	# y, tmp132
+	subl	$26, %eax	#, _11
+	pushl	%ecx	# _9
+	pushl	%edx	# _10
+	pushl	%eax	# _11
+	pushl	$0	#
+	pushl	$8	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:289: 	boxfill8(vram, x, COL8_FFFFFF,  3,     y - 24, 59,     y - 24);
+	movl	16(%ebp), %eax	# y, tmp133
+	leal	-24(%eax), %edx	#, _12
+	movl	16(%ebp), %eax	# y, tmp134
+	subl	$24, %eax	#, _13
+	pushl	%edx	# _12
+	pushl	$59	#
+	pushl	%eax	# _13
+	pushl	$3	#
+	pushl	$7	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:290: 	boxfill8(vram, x, COL8_FFFFFF,  2,     y - 24,  2,     y -  4);
+	movl	16(%ebp), %eax	# y, tmp135
+	leal	-4(%eax), %edx	#, _14
+	movl	16(%ebp), %eax	# y, tmp136
+	subl	$24, %eax	#, _15
+	pushl	%edx	# _14
+	pushl	$2	#
+	pushl	%eax	# _15
+	pushl	$2	#
+	pushl	$7	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:291: 	boxfill8(vram, x, COL8_848484,  3,     y -  4, 59,     y -  4);
+	movl	16(%ebp), %eax	# y, tmp137
+	leal	-4(%eax), %edx	#, _16
+	movl	16(%ebp), %eax	# y, tmp138
+	subl	$4, %eax	#, _17
+	pushl	%edx	# _16
+	pushl	$59	#
+	pushl	%eax	# _17
+	pushl	$3	#
+	pushl	$15	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:292: 	boxfill8(vram, x, COL8_848484, 59,     y - 23, 59,     y -  5);
+	movl	16(%ebp), %eax	# y, tmp139
+	leal	-5(%eax), %edx	#, _18
+	movl	16(%ebp), %eax	# y, tmp140
+	subl	$23, %eax	#, _19
+	pushl	%edx	# _18
+	pushl	$59	#
+	pushl	%eax	# _19
+	pushl	$59	#
+	pushl	$15	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:293: 	boxfill8(vram, x, COL8_000000,  2,     y -  3, 59,     y -  3);
+	movl	16(%ebp), %eax	# y, tmp141
+	leal	-3(%eax), %edx	#, _20
+	movl	16(%ebp), %eax	# y, tmp142
+	subl	$3, %eax	#, _21
+	pushl	%edx	# _20
+	pushl	$59	#
+	pushl	%eax	# _21
+	pushl	$2	#
+	pushl	$0	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:294: 	boxfill8(vram, x, COL8_000000, 60,     y - 24, 60,     y -  3);
+	movl	16(%ebp), %eax	# y, tmp143
+	leal	-3(%eax), %edx	#, _22
+	movl	16(%ebp), %eax	# y, tmp144
+	subl	$24, %eax	#, _23
+	pushl	%edx	# _22
+	pushl	$60	#
+	pushl	%eax	# _23
+	pushl	$60	#
+	pushl	$0	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:296: 	boxfill8(vram, x, COL8_848484, x - 47, y - 24, x -  4, y - 24);
+	movl	16(%ebp), %eax	# y, tmp145
+	leal	-24(%eax), %ebx	#, _24
+	movl	12(%ebp), %eax	# x, tmp146
+	leal	-4(%eax), %ecx	#, _25
+	movl	16(%ebp), %eax	# y, tmp147
+	leal	-24(%eax), %edx	#, _26
+	movl	12(%ebp), %eax	# x, tmp148
+	subl	$47, %eax	#, _27
+	pushl	%ebx	# _24
+	pushl	%ecx	# _25
+	pushl	%edx	# _26
+	pushl	%eax	# _27
+	pushl	$15	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:297: 	boxfill8(vram, x, COL8_848484, x - 47, y - 23, x - 47, y -  4);
+	movl	16(%ebp), %eax	# y, tmp149
+	leal	-4(%eax), %ebx	#, _28
+	movl	12(%ebp), %eax	# x, tmp150
+	leal	-47(%eax), %ecx	#, _29
+	movl	16(%ebp), %eax	# y, tmp151
+	leal	-23(%eax), %edx	#, _30
+	movl	12(%ebp), %eax	# x, tmp152
+	subl	$47, %eax	#, _31
+	pushl	%ebx	# _28
+	pushl	%ecx	# _29
+	pushl	%edx	# _30
+	pushl	%eax	# _31
+	pushl	$15	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:298: 	boxfill8(vram, x, COL8_FFFFFF, x - 47, y -  3, x -  4, y -  3);
+	movl	16(%ebp), %eax	# y, tmp153
+	leal	-3(%eax), %ebx	#, _32
+	movl	12(%ebp), %eax	# x, tmp154
+	leal	-4(%eax), %ecx	#, _33
+	movl	16(%ebp), %eax	# y, tmp155
+	leal	-3(%eax), %edx	#, _34
+	movl	12(%ebp), %eax	# x, tmp156
+	subl	$47, %eax	#, _35
+	pushl	%ebx	# _32
+	pushl	%ecx	# _33
+	pushl	%edx	# _34
+	pushl	%eax	# _35
+	pushl	$7	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:299: 	boxfill8(vram, x, COL8_FFFFFF, x -  3, y - 24, x -  3, y -  3);
+	movl	16(%ebp), %eax	# y, tmp157
+	leal	-3(%eax), %ebx	#, _36
+	movl	12(%ebp), %eax	# x, tmp158
+	leal	-3(%eax), %ecx	#, _37
+	movl	16(%ebp), %eax	# y, tmp159
+	leal	-24(%eax), %edx	#, _38
+	movl	12(%ebp), %eax	# x, tmp160
+	subl	$3, %eax	#, _39
+	pushl	%ebx	# _36
+	pushl	%ecx	# _37
+	pushl	%edx	# _38
+	pushl	%eax	# _39
+	pushl	$7	#
+	pushl	12(%ebp)	# x
+	pushl	8(%ebp)	# vram
+	call	boxfill8	#
+	addl	$28, %esp	#,
+# main.c:300: 	return;
+	nop	
+# main.c:301: }
+	movl	-4(%ebp), %ebx	#,
+	leave	
+	.cfi_restore 5
+	.cfi_restore 3
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE9:
+	.size	init_screen, .-init_screen
+	.globl	InitPIC
+	.type	InitPIC, @function
+InitPIC:
+.LFB10:
+	.cfi_startproc
+	endbr32	
+	pushl	%ebp	#
+	.cfi_def_cfa_offset 8
+	.cfi_offset 5, -8
+	movl	%esp, %ebp	#,
+	.cfi_def_cfa_register 5
+	pushl	%ebx	#
+	subl	$4, %esp	#,
+	.cfi_offset 3, -12
+	call	__x86.get_pc_thunk.bx	#
+	addl	$_GLOBAL_OFFSET_TABLE_, %ebx	# tmp82,
+# main.c:307:     FunctionOut8(0x20,0x11);
+	subl	$8, %esp	#,
+	pushl	$17	#
+	pushl	$32	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:308:     FunctionOut8(0xa0,0x11);
+	subl	$8, %esp	#,
+	pushl	$17	#
+	pushl	$160	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:310:     FunctionOut8(0x21,0x20);
+	subl	$8, %esp	#,
+	pushl	$32	#
+	pushl	$33	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:312:     FunctionOut8(0xa1,0x28);
+	subl	$8, %esp	#,
+	pushl	$40	#
+	pushl	$161	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:314:     FunctionOut8(0x21,0x04);
+	subl	$8, %esp	#,
+	pushl	$4	#
+	pushl	$33	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:315:     FunctionOut8(0xa1,0x02);
+	subl	$8, %esp	#,
+	pushl	$2	#
+	pushl	$161	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:317:     FunctionOut8(0x21,0x01);
+	subl	$8, %esp	#,
+	pushl	$1	#
+	pushl	$33	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:318:     FunctionOut8(0xa1,0x01);
+	subl	$8, %esp	#,
+	pushl	$1	#
+	pushl	$161	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:320:     FunctionOut8(0x21,0xff);
+	subl	$8, %esp	#,
+	pushl	$255	#
+	pushl	$33	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:322:     FunctionOut8(0xa1,0xff);
+	subl	$8, %esp	#,
+	pushl	$255	#
+	pushl	$161	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:324: 	FunctionOut8(0x0021,  0xfb  ); /* 11111011 PIC1以外全部禁止 */
+	subl	$8, %esp	#,
+	pushl	$251	#
+	pushl	$33	#
+	call	FunctionOut8@PLT	#
+	addl	$16, %esp	#,
+# main.c:325: }
+	nop	
+	movl	-4(%ebp), %ebx	#,
+	leave	
+	.cfi_restore 5
+	.cfi_restore 3
+	.cfi_def_cfa 4, 4
+	ret	
+	.cfi_endproc
+.LFE10:
+	.size	InitPIC, .-InitPIC
+	.section	.text.__x86.get_pc_thunk.ax,"axG",@progbits,__x86.get_pc_thunk.ax,comdat
+	.globl	__x86.get_pc_thunk.ax
+	.hidden	__x86.get_pc_thunk.ax
+	.type	__x86.get_pc_thunk.ax, @function
+__x86.get_pc_thunk.ax:
+.LFB11:
+	.cfi_startproc
+	movl	(%esp), %eax	#,
+	ret	
+	.cfi_endproc
+.LFE11:
+	.section	.text.__x86.get_pc_thunk.bx,"axG",@progbits,__x86.get_pc_thunk.bx,comdat
+	.globl	__x86.get_pc_thunk.bx
+	.hidden	__x86.get_pc_thunk.bx
+	.type	__x86.get_pc_thunk.bx, @function
+__x86.get_pc_thunk.bx:
+.LFB12:
+	.cfi_startproc
+	movl	(%esp), %ebx	#,
+	ret	
+	.cfi_endproc
+.LFE12:
+	.ident	"GCC: (Ubuntu 10.2.0-13ubuntu1) 10.2.0"
+	.section	.note.GNU-stack,"",@progbits
+	.section	.note.gnu.property,"a"
+	.align 4
+	.long	 1f - 0f
+	.long	 4f - 1f
+	.long	 5
+0:
+	.string	 "GNU"
+1:
+	.align 4
+	.long	 0xc0000002
+	.long	 3f - 2f
+2:
+	.long	 0x3
+3:
+	.align 4
+4:

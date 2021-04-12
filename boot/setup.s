@@ -1,3 +1,4 @@
+
 .code16
 .section .text
 .set    CYLS,   0X0FF0
@@ -6,6 +7,7 @@
 .set    SCRNX,  0X0FF4
 .set    SCRNY,  0X0FF6
 .set    VRAM,   0X0FF8
+
 start:
     movb    $0x13, %al
     movb    $0x00, %ah
@@ -28,14 +30,14 @@ start:
 
 ########################################start 32
 ############set GDT
-    movl    gdt_base,    %eax  
+    movl    gdt_base ,    %eax  
 
 
 
 ############0# empty GDT
     movl    $0x00000000,   0(%eax)
     movl    $0x00000000,   4(%eax)
-############1# code GDT
+############1# code GDTs
     movl    $0x8200ffff,   8(%eax)
     movl    $0x00409a00,   12(%eax)
 ############2# data GDT
@@ -91,10 +93,13 @@ seta20.2:
 
 start_protect:
 .code32
+   
+   
+
     movw    $0x0010,   %ax
-    movw    %ax,        %ds
+    movw    %ax,       %ds
     movw    $0x0018,   %ax
-    movw    %ax,        %ss
+    movw    %ax,       %ss
     movl    $0x7a00,   %esp
 
     call    SysMain

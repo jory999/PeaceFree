@@ -258,5 +258,45 @@ void InitIDT()
 	set_gatedesc(idt + 0x27, (int) asm_inthandler27, 2 * 8, AR_INTGATE32);
 	set_gatedesc(idt + 0x2c, (int) asm_inthandler2c, 2 * 8, AR_INTGATE32);
      */
-    FunctionLidt(0x30*8-1,idt);
+    FunctionLidt(0x30*8-1,idt );
 }
+
+/* void InitIDT()
+{
+    static struct idt_struct{
+    short   offset1;
+    short   selector;
+    short   no_use;
+    short   offset2;
+    } idt[0x30];//初始化0~0x30的中断
+
+   
+
+    int i;
+    ////////////#0，必须有0项
+    idt[0].offset1 = 0x00;
+    idt[0].selector = 0x00;
+    idt[0].no_use = 0x00;
+    idt[0].offset2 = 0x00;
+    for (i=1;i<0x30;i++)
+    {
+       
+        
+        idt[i].offset1 = (short)((int)(void*)DefaultIntCallBack-0x8200);
+        idt[i].selector = 0x0008;
+        idt[i].no_use = 0x8e00;
+        idt[i].offset2 = (short)(((int)(void*)DefaultIntCallBack-0x8200)>>16);  
+    }
+        idt[0x21].offset1 = (short)((int)(void*)asm_inthandler21-0x8200);
+        idt[0x21].selector = 0x0008;
+        idt[0x21].no_use = 0x8e00;
+        idt[0x21].offset2 = (short)(((int)(void*)asm_inthandler21-0x8200)>>16);  
+
+        idt[0x2c].offset1 = (short)((int)(void*)asm_inthandler2c-0x8200);
+        idt[0x2c].selector = 0x0008;
+        idt[0x2c].no_use = 0x8e00;
+        idt[0x2c].offset2 = (short)(((int)(void*)asm_inthandler2c-0x8200)>>16);  
+
+   
+    FunctionLidt(0x30*8-1,idt);
+} */

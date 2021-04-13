@@ -197,10 +197,12 @@ int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, 
     //binfo = (struct BOOTINFO1 * ) 0x0ff0;
     char c;   
     
-   
+   //char *literal = format + 0x8200;
      
     va_list ap;
     va_start(ap, format);
+    //ap++;
+    //(ap = (int *)&(A) + 1) ap =(int *) &literal + 1
     //va_start(ap, ppp);
     int i=0;
     while ((c = *format++) != '\0')
@@ -222,9 +224,9 @@ int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, 
                         //PutChar(vram,  xsize,x+8*i , y, str111[i],color);
                         break;
                     case 's':
-                        p = va_arg(ap, char *);
+                        p = va_arg(ap, char *) ;//(*(char* *)ap++)  
                         //p = (char *)ap++;
-                        PutString(vram,xsize,x+8*i, y, color, p);
+                        PutString(vram,xsize,x+8*i, y, color, p );
                         break;                    
                     case 'x':
                         a = va_arg(ap, int);

@@ -7,21 +7,21 @@ run:bootsect.bin setup.bin
 
 
 	#qemu-system-i386 -fda loader.img -boot a
-	qemu-system-i386 -fda loader.img -boot a -gdb tcp::1234   -monitor stdio 
+	qemu-system-i386 -fda loader.img -boot a -gdb tcp::1234 -monitor stdio 
 
 	#qemu-system-i386 -fda $(BIN_DIR)/loader.img -boot a -gdb tcp::1234   -monitor stdio seek=1 count=1
     #qemu-system-i386 -fda $(BIN_DIR)/loader.img -boot a -gdb tcp::1234 -monitor stdio -T kernel.ld
 
 bootsect.bin : bootsect.o  Makefile kernel1.ld
 	ld -M --oformat binary -m elf_i386 -o bootsect.bin bootsect.o -T kernel1.ld
-	#ld --oformat binary -N -Ttext 0x7c00 -o bootsect.bin bootsect.o 
+	#ld  -m elf_i386 -static --oformat binary -N -Ttext 0x7c00 -o bootsect.bin bootsect.o 
 
 bootsect.o : bootsect.s Makefile
 	#as --32 bootsect.s -o bootsect.o 
 	as --32 -o bootsect.o bootsect.s	
 
-setup.bin : setup.o   Makefile kernel.ld main.o functions.o font.o font_code.o
-	ld -M  -m elf_i386 -o setup.elf setup.o -T kernel.ld main.o functions.o font.o font_code.o  
+setup.bin : setup.o   Makefile  main.o functions.o font.o font_code.o
+	ld -M  -m elf_i386 -o setup.elf  setup.o -T kernel.ld main.o functions.o font.o font_code.o  
 	objcopy -O binary setup.elf setup.bin
 	#ld -M --oformat binary -m elf_i386 -o setup.bin setup.o -T kernel.ld main.o font.o
 	#ld  -o setup.bin setup.o 

@@ -38,7 +38,7 @@ start:
     movl    $0x00000000,   0(%eax)
     movl    $0x00000000,   4(%eax)
 ############1# code GDTs
-    movl    $0x8200ffff,   8(%eax)
+    movl    $0x0000ffff,   8(%eax)
     movl    $0x00409a00,   12(%eax)
 ############2# data GDT
     movl    $0x0000ffff,   16(%eax)
@@ -89,7 +89,9 @@ seta20.2:
 	
 
 #protect mode start
-    ljmp    $0x0008,	$(start_protect-start) #16位描述子：32位位移
+    #ljmp    $0x0008,	$(start_protect-start) #16位描述子：32位位移
+
+	ljmp    $0x0008,	$start_protect
 
 start_protect:
 .code32

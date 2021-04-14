@@ -236,9 +236,10 @@ void SysMain()
 	//static char *nowputs="GOD Will Bless My Family Amen%s";
 
    //  printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, nowput,"ccc");
-   unsigned  char nowput[99] = "GOD Will Bless My Family Amen%s";
-	 printaaa(binfo->vram, binfo->scrnx, 20, 30, 7,nowput ," Amen Yes");
-	   printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family%s" ," Amen Yes");
+   unsigned  char nowput[99] = "aaa%x";
+   unsigned  char nowput1[33] = "Yes";
+	 //printaaa(binfo->vram, binfo->scrnx, 20, 30, 7,nowput ,nowput1);
+	   printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"bbb%y" ,"YYY");
   
    //int yy = 6/0;
 

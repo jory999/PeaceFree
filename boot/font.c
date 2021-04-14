@@ -11,10 +11,38 @@ void PutIntHex(char *vram, int xsize,int x,int y,int color, int a);
 extern const char font_code_global[94][16];
 
 
-typedef int* va_list;
+typedef int  va_list;
+#define va_start(ap, A)   (ap = A)
+#define va_arg(ap, T)     (*(T *)ap+=4)
+#define va_end(ap)        ((void)0)
+
+/* typedef int* va_list;
 #define va_start(ap, A)   (ap = (int *)&(A) + 1)
 #define va_arg(ap, T)     (*(T *)ap++)
-#define va_end(ap)        ((void)0)
+#define va_end(ap)        ((void)0) */
+
+
+/* typedef unsigned int uint32;
+#define _AUPBND         (sizeof (uint32) - 1)
+#define _ADNBND         (sizeof (uint32) - 1)
+typedef char* va_list;
+#define _bnd(X, bnd)    (((sizeof (X)) + (bnd)) & (~(bnd)))
+#define va_arg(ap, T)   (*(T *)(((ap) += (_bnd (T, _AUPBND))) - (_bnd (T,_ADNBND))))
+#define va_end(ap)      (void) 0
+#define va_start(ap, A) (void) ((ap) = (((char *) &(A)) + (_bnd (A,_AUPBND)))) */
+
+//  (void) (        (ap) = (  (char *) &(A)) + 4              )
+                                    //    ((4) + (3)) &   (~(3)) 0111 & 1100 0100
+ /* typedef char * va_list;
+
+　　#define _INTSIZEOF(n)   ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
+
+　　#define va_start(ap,v) ( ap = (va_list)&v + _INTSIZEOF(v) )
+
+　　#define va_arg(ap,t)    ( *(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)) )
+
+　　#define va_end(ap)      ( ap = (va_list)0 )
+ */
 
 
 /* void DrawPoint(int x,int y,int color)
@@ -190,20 +218,21 @@ void PutIntHex(char *vram, int xsize,int x,int y,int color, int a)
   }
 
 int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, ...)
-//int printaaa(char *vram, int xsize,int x, int y, int color, const (char *) &format, ...)
+
 {
    
-
-    //binfo = (struct BOOTINFO1 * ) 0x0ff0;
+                        PutString(vram,xsize,x, y, color, format);
+                        PutIntHex(vram,xsize,x,y+10,color,format);
+                        PutIntHex(vram,xsize,x,y+20,color,&format);
+                        return 0;
+    
     char c;   
     
-   //char *literal = format + 0x8200;
+  
      
     va_list ap;
     va_start(ap, format);
-    //ap++;
-    //(ap = (int *)&(A) + 1) ap =(int *) &literal + 1
-    //va_start(ap, ppp);
+   
     int i=0;
     while ((c = *format++) != '\0')
     {
@@ -221,17 +250,24 @@ int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, 
                     case 'c':
                         ch = va_arg(ap, int); 
                         PutChar(vram,xsize, x+8*i,y,ch,color);
-                        //PutChar(vram,  xsize,x+8*i , y, str111[i],color);
+                       
                         break;
                     case 's':
-                        p = va_arg(ap, char *) ;//(*(char* *)ap++)  
+                        p = va_arg(ap, char* ) ;//(*(char* *)ap++)  
+                       
                         //p = (char *)ap++;
                         PutString(vram,xsize,x+8*i, y, color, p );
                         break;                    
                     case 'x':
-                        a = va_arg(ap, int);
-                        PutIntHex(vram,xsize,x,y,color,a);
-                        break;        
+                        //a = va_arg(ap, int);
+                        PutString(vram,xsize,x, y, color, *format );
+                        PutIntHex(vram,xsize,x,y+10,color,format);
+                        PutIntHex(vram,xsize,x,y+20,color,&format);
+                        break;   
+                    case 'y':
+                        //a = va_arg(ap, int);
+                        PutIntHex(vram,xsize,x,y+10,color,ap);
+                        break;             
                     case 'd':
                         a = va_arg(ap, int);
                         Int2String(a, buf);
@@ -248,5 +284,7 @@ int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, 
                 break;
         }
     }
+
+     va_end(ap); 
     return 0;    
 } 

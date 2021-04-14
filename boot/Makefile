@@ -7,7 +7,7 @@ run:bootsect.bin setup.bin
 
 
 	#qemu-system-i386 -fda loader.img -boot a
-	qemu-system-i386 -fda loader.img -boot a -gdb tcp::1234 -monitor stdio 
+	qemu-system-i386 -fda loader.img -boot a -gdb tcp::1234  -monitor stdio 
 
 	#qemu-system-i386 -fda $(BIN_DIR)/loader.img -boot a -gdb tcp::1234   -monitor stdio seek=1 count=1
     #qemu-system-i386 -fda $(BIN_DIR)/loader.img -boot a -gdb tcp::1234 -monitor stdio -T kernel.ld

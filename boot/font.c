@@ -1,4 +1,7 @@
 #include "font.h"
+#include <stdarg.h>
+
+
 void DrawPoint(char *vram, int xsize,int x,int y,int color);//画一个点
 void PutChar(char *vram, int xsize,int x,int y, char put_char, int color);//画一个字符
 
@@ -11,10 +14,7 @@ void PutIntHex(char *vram, int xsize,int x,int y,int color, int a);
 extern const char font_code_global[94][16];
 
 
-typedef int  va_list;
-#define va_start(ap, A)   (ap = A)
-#define va_arg(ap, T)     (*(T *)ap+=4)
-#define va_end(ap)        ((void)0)
+
 
 /* typedef int* va_list;
 #define va_start(ap, A)   (ap = (int *)&(A) + 1)
@@ -220,12 +220,15 @@ void PutIntHex(char *vram, int xsize,int x,int y,int color, int a)
 int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, ...)
 
 {
-   
-                        PutString(vram,xsize,x, y, color, format);
+                       /*  va_list ap;
+                        va_start(ap, format);
+                        PutIntHex(vram,xsize,x,y-20,color,*ap);
+                        PutIntHex(vram,xsize,x,y-10,color,ap);
+                        PutString(vram,xsize,x, y, color, *ap);
                         PutIntHex(vram,xsize,x,y+10,color,format);
-                        PutIntHex(vram,xsize,x,y+20,color,&format);
+                        PutIntHex(vram,xsize,x,y+20,color,&(format));
                         return 0;
-    
+     */
     char c;   
     
   
@@ -264,10 +267,7 @@ int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, 
                         PutIntHex(vram,xsize,x,y+10,color,format);
                         PutIntHex(vram,xsize,x,y+20,color,&format);
                         break;   
-                    case 'y':
-                        //a = va_arg(ap, int);
-                        PutIntHex(vram,xsize,x,y+10,color,ap);
-                        break;             
+                    
                     case 'd':
                         a = va_arg(ap, int);
                         Int2String(a, buf);

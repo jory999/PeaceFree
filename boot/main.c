@@ -15,7 +15,7 @@ extern int FunctionLoadEflags(void);
 extern void FunctionStoreEflags(int eflags);
 extern void FunctionLidt(short, void *);
 
-//test remote pull
+//
 
 void InitPalette();
 void DrawRectangle(int x1,int y1,int x2,int y2,int color);

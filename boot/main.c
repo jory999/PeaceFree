@@ -241,7 +241,7 @@ void SysMain()
 	 printaaa(binfo->vram, binfo->scrnx, 20, 30, 7,nowput ,nowput1);
 	   printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
   
-   //int yy = 6/0; ////
+   //int yy = 6/0; ////asdfghjkl
 
     while(1);
 }

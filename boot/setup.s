@@ -9,10 +9,64 @@
 .set    VRAM,   0X0FF8
 
 start:
-    movb    $0x13, %al
-    movb    $0x00, %ah
-    int $0x10
+    jmp set_vga_0x13
+
+    xorw    %ax,        %ax
+    movw    %ax,        %ds
+    movw    %ax,        %es
+    movw    $0x800,        %di # buffer
+
+    # check vbe
+    movw    $0x4f00,   %ax
+    int     $0x10
+
+    cmp     $0x004f,   %ax
+    jne     set_vga_0x13
+
+    movw    0x04(%di),  %ax
+    cmp     $0x0200,   %ax # vbe version < 2.0
+    jb      set_vga_0x13
+
+    # check vbe mode 0x118
+    movw    $0x118,        %cx
+    movw    $0x4f01,   %ax
+    int     $0x10
+
+    cmpb    $0x00,     %ah # call failed
+    jne     set_vga_0x13
+
+    cmpb    $0x4f,     %al # not support this mode
+    jne     set_vga_0x13
+
+    movw    (%di),      %ax
+    andw    $0x0080,   %ax # not support Linear Frame Buffer memory model
+    jz      set_vga_0x13
+
     
+
+    #set vbe mode
+    movw    $0x118,        %bx
+    addw    $0x4000,   %bx
+    movw    $0x4f02,   %ax
+    int     $0x10
+    
+    movb    $9,    CYLS
+    movb    $8,    VMODE
+    movw    $1024,  SCRNX
+    movw    $768,  SCRNY
+    movl    $0xe0000000,    VRAM
+
+    movb    $0x02, %ah
+    int $0x16
+    mov %al,    LEDS
+
+    jmp     entry 
+set_vga_0x13:
+    movb    $0,            %ah
+    movb    $0x13,     %al
+    int     $0x10
+
+
 	movb    $9,    CYLS
     movb    $8,    VMODE
     movw    $320,  SCRNX
@@ -22,7 +76,7 @@ start:
     movb    $0x02, %ah
     int $0x16
     mov %al,    LEDS
-
+entry:  
     movw    %cs,    %ax
     movw    %ax,    %ds
     movw    %ax,    %es

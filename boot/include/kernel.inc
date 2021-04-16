@@ -8,7 +8,7 @@
 # 内核常量定义：
 .equ    SECT_SIZE,              512     # 一个扇区大小
 .equ	KERNEL_SECT_NUM,		1024	# babyos 内核sect数
-.equ    TMP_KERNEL_ADDR,        0x8200  # kernel 临时地址
+.equ    TMP_KERNEL_ADDR,        0x10000 # kernel 临时地址
 
 .equ    STACK_BOOT_BOTTOM,      0x1000
 .equ	STACK_PM_BOTTOM,		0xa0000

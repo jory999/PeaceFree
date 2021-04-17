@@ -1,6 +1,6 @@
 .code32
 .section .text
-.global FunctionHlt
+.global FunctionHlt,FunctionStihlt
 .global FunctionOut8, FunctionOut16, FunctionOut32
 .global FuntionIn8, FuntionIn16, FuntionIn32
 .global FunctionCli, FunctionSti
@@ -56,6 +56,11 @@ FunctionCli:    #void FunctionCli(void)
 FunctionSti: #void FunctionSti(void)
     sti
     ret
+
+FunctionStihlt:	# void io_stihlt(void);
+		STI
+		HLT
+		RET
 
 FunctionLoadEflags: #int FunctionLoadEflags(void)
     pushf

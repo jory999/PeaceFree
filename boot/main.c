@@ -218,13 +218,18 @@ void test()
 
 
 //////////////////////////
+
+extern struct FIFO8 keyfifo, mousefifo;
+void enable_mouse(void);
+void init_keyboard(void);
  
 void SysMain()
 {
    
 //    test();
-    
+    char s[80], mcursor[256], keybuf[32], mousebuf[128];
    
+
     char *vram;
     int xsize, ysize;
     struct BOOTINFO *binfo;
@@ -234,19 +239,14 @@ void SysMain()
     ysize = (*binfo).scrny;
     vram  = (*binfo).vram;
 
-	char s[80], mcursor[256];
-	int mx, my;
-
-    InitPalette();
-    init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
 	
-    mx = (binfo->scrnx - 16) / 2; /* 计算画面的中心坐标*/
-	my = (binfo->scrny - 28 - 16) / 2;
-	init_mouse_cursor8(mcursor, COL8_008484);
-	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
+	int mx, my,i;
 
-	
+   InitIDT();
+   InitPIC();
+   FunctionSti();
 
+   
 	 
     //  printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, nowput,nowputs);
     
@@ -274,12 +274,69 @@ void SysMain()
     //PutString(20,160,9,"hello\0");
 
 	
-   InitIDT();
-   InitPIC();
+  
 
+   fifo8_init(&keyfifo, 32, keybuf);
+   fifo8_init(&mousefifo, 128, mousebuf);
    FunctionOut8(0x0021, 0xf9); /* 开放PIC1和键盘中断(11111001) */
    FunctionOut8(0x00a1, 0xef); /* 开放鼠标中断(11101111) */
 
+   init_keyboard();
+
+    InitPalette();
+    init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
+	
+    mx = (binfo->scrnx - 16) / 2; /* 计算画面的中心坐标*/
+	my = (binfo->scrny - 28 - 16) / 2;
+	init_mouse_cursor8(mcursor, COL8_008484);
+	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
+
+	printaaa(binfo->vram, binfo->scrnx, 0, 0, 7,"X=%d" ,mx);
+	printaaa(binfo->vram, binfo->scrnx, 110, 0, 7,"Y=%d" ,my);
+
+
+   enable_mouse();
+
+	for (;;) {
+		//io_cli();
+		FunctionCli();
+		if (fifo8_status(&keyfifo) + fifo8_status(&mousefifo) == 0) {
+			FunctionStihlt();
+		} else {
+			if (fifo8_status(&keyfifo) != 0) {
+				i = fifo8_get(&keyfifo);
+				FunctionSti();
+				printaaa(binfo->vram, binfo->scrnx, 10, 60, 7,"%d" ,i);
+                
+				
+				//Int2String(i, s);
+				//sprintf(s, "%02X", i);
+				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484,  0, 16, 15, 31);
+				//putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, 7, s);
+
+				//sprintf(s, "%02X", i);
+				//printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
+				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484,  0, 16, 15, 31);
+				//PutIntHex(binfo->vram, binfo->scrnx, 0, 16, 7, i);
+				//putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
+			} else if (fifo8_status(&mousefifo) != 0) {
+				i = fifo8_get(&mousefifo);
+				FunctionSti();
+                
+				printaaa(binfo->vram, binfo->scrnx, 10, 16, 7," %d" ,i);
+
+                // Int2String(i, s);
+				//sprintf(s, "%02X", i);
+				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 32, 16, 47, 31);
+				//putfonts8_asc(binfo->vram, binfo->scrnx, 32, 16, 7, s); 
+
+				//sprintf(s, "%02X", i);
+				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 36, 47, 31);
+				//PutIntHex(binfo->vram, binfo->scrnx, 0, 36, 7, i);
+				//putfonts8_asc(binfo->vram, binfo->scrnx, 32, 16, COL8_FFFFFF, s);
+			}
+		}
+	}
    //unsigned  char nowput[2][30]={{"GOD Will Bless My Family%s"} ,{"Amen"}};   
    
  
@@ -288,16 +345,57 @@ void SysMain()
 	//static char *nowputs="GOD Will Bless My Family Amen%s";
 
    //  printaaa(binfo->vram, binfo->scrnx, 10, 30, 7, nowput,"ccc");
-   unsigned  char nowput[99] = "GOD Will Bless My Family  %s";
-   unsigned  char nowput1[33] = "Amen";
-	 printaaa(binfo->vram, binfo->scrnx, 20, 30, 7,nowput ,nowput1);
-	   printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
+   //unsigned  char nowput[99] = "GOD Will Bless My Family  %s";
+   //unsigned  char nowput1[33] = "Amen";
+	 //printaaa(binfo->vram, binfo->scrnx, 20, 30, 7,nowput ,nowput1);
+	   //printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
   
    //int yy = 6/0; ////asdfghjkl
 
-    while(1);
+    //while(1);
 }
  
+#define PORT_KEYDAT				0x0060
+#define PORT_KEYSTA				0x0064
+#define PORT_KEYCMD				0x0064
+#define KEYSTA_SEND_NOTREADY	0x02
+#define KEYCMD_WRITE_MODE		0x60
+#define KBC_MODE				0x47
+
+void wait_KBC_sendready(void)
+{
+	/* 等待键盘控制电路准备完毕 */
+	for (;;) {
+		if ((FuntionIn8(PORT_KEYSTA) & KEYSTA_SEND_NOTREADY) == 0) {
+			break;
+		}
+	}
+	return;
+}
+
+void init_keyboard(void)
+{
+	/* 初始化键盘控制电路 */
+	wait_KBC_sendready();
+	FunctionOut8(PORT_KEYCMD, KEYCMD_WRITE_MODE);
+	wait_KBC_sendready();
+	FunctionOut8(PORT_KEYDAT, KBC_MODE);
+	return;
+}
+
+#define KEYCMD_SENDTO_MOUSE		0xd4
+#define MOUSECMD_ENABLE			0xf4
+
+void enable_mouse(void)
+{
+	/* 激活鼠标 */
+	wait_KBC_sendready();
+	FunctionOut8(PORT_KEYCMD, KEYCMD_SENDTO_MOUSE);
+	wait_KBC_sendready();
+	FunctionOut8(PORT_KEYDAT, MOUSECMD_ENABLE);
+	return; /* 顺利的话，键盘控制器会返回ACK(0xfa) */
+}
+
 void set_palette(int start, int end, unsigned char *rgb);
 void InitPalette()
 {

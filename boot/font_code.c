@@ -154,37 +154,126 @@ void DefaultIntCallBack()//回调函数
     ysize = (*binfo).scrny;
     vram  = (*binfo).vram;
     //PutString(100, 100,"There Is An INT!!!!\0",0xffffff);
-      unsigned  char *nowput9="There Is An INT";
+     // unsigned  char *nowput9="There Is An INT";
       //putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, nowput9);
-      PutString(binfo->vram, binfo->scrnx,60, 90,7,nowput9);
+     // PutString(binfo->vram, binfo->scrnx,60, 90,7,nowput9);
 	/* unsigned  char *nowput9="There Is An INT";
       PutString(binfo->vram, binfo->scrnx,10, 90,7,nowput9); */
 
 	
 }  
 
+
+#define FLAGS_OVERRUN		0x0001
+
+void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf)
+/* 初始化FIFO缓冲区 */
+{
+	fifo->size = size;
+	fifo->buf = buf;
+	fifo->free = size; /* 缓冲区大小 */
+	fifo->flags = 0;
+	fifo->p = 0; /* 下一个数据写入位置 */
+	fifo->q = 0; /* 下一个数据读出位置 */
+	return;
+}
+
+int fifo8_put(struct FIFO8 *fifo, unsigned char data)
+/* 向FIFO传送数据并保存 */
+{
+	if (fifo->free == 0) {
+		/* 没有空间了，溢出 */
+		fifo->flags |= FLAGS_OVERRUN;
+		return -1;
+	}
+	fifo->buf[fifo->p] = data;
+	fifo->p++;
+	if (fifo->p == fifo->size) {
+		fifo->p = 0;
+	}
+	fifo->free--;
+	return 0;
+}
+
+int fifo8_get(struct FIFO8 *fifo)
+/* 从FIFO取得一个数据 */
+{
+	int data;
+	if (fifo->free == fifo->size) {
+		/* 如果缓冲区为空则返回-1 */
+		return -1;
+	}
+	data = fifo->buf[fifo->q];
+	fifo->q++;
+	if (fifo->q == fifo->size) {
+		fifo->q = 0;
+	}
+	fifo->free++;
+	return data;
+}
+
+int fifo8_status(struct FIFO8 *fifo)
+/* 报告一下积攒是数据量 */
+{
+	return fifo->size - fifo->free;
+}
+
+#define PORT_KEYDAT		0x0060
+
+struct FIFO8 keyfifo;
  void inthandler21(int *esp)
 /* 来自PS/2键盘的中断 */
 {
-	struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+	/* struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
 	boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
      unsigned  char nowput91[66]="INT 21 (IRQ-1) : PS/2 keyboard";
 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, nowput91);
 	for (;;) {
 		FunctionHlt();
-	}
+	} */
+
+
+    //////////////////////////////////
+
+    //struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+	unsigned char data, s[4];
+	FunctionOut8(PIC0_OCW2, 0x61);	/* 通知PIC IRQ-01 已经受理完毕 */
+	data = FuntionIn8(PORT_KEYDAT);
+	fifo8_put(&keyfifo, data);
+    //Int2String(data, s);
+    //boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
+    //boxfill8(binfo->vram, binfo->scrnx, 0,  0, 16, 15, 31);
+    //PutIntHex(binfo->vram, binfo->scrnx, 0, 0, 7, data);
+    
+    //putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, s);
+	return;
 }
 
+struct FIFO8 mousefifo;
 void inthandler2c(int *esp)
 /* 来自PS/2鼠标的中断 */
 {
-	struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+	/* struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
 	boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
      unsigned  char nowput92[66]="IINT 2C (IRQ-12) : PS/2 mouse";
 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, nowput92);
 	for (;;) {
 		FunctionHlt();
-	}
+	} */
+    //struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+    unsigned char data,s[10];
+	FunctionOut8(PIC1_OCW2, 0x64);	/* 通知PIC IRQ-12 已经受理完毕 */
+	FunctionOut8(PIC0_OCW2, 0x62);	/* 通知PIC IRQ-02 已经受理完毕 */
+	data = FuntionIn8(PORT_KEYDAT);
+	fifo8_put(&mousefifo, data);
+
+    //Int2String(data, s);
+    //boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
+    //PutIntHex(binfo->vram, binfo->scrnx, 0, 0, 7, data);
+    //putfonts8_asc(binfo->vram, binfo->scrnx, 160, 0, 7, s);
+    //printaaa(binfo->vram, binfo->scrnx, 20, 100, 7,"Mouse  %s" ,"Here");
+    
+	return;
 }
 
 void inthandler27(int *esp)

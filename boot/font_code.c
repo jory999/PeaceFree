@@ -243,7 +243,7 @@ struct FIFO8 keyfifo;
     //Int2String(data, s);
     //boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
     //boxfill8(binfo->vram, binfo->scrnx, 0,  0, 16, 15, 31);
-    //PutIntHex(binfo->vram, binfo->scrnx, 0, 0, 7, data);
+    //PutIntHex(binfo->vram, binfo->scrnx, 0, 80, 7, data);
     
     //putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, s);
 	return;
@@ -269,7 +269,7 @@ void inthandler2c(int *esp)
 
     //Int2String(data, s);
     //boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
-    //PutIntHex(binfo->vram, binfo->scrnx, 0, 0, 7, data);
+    //PutIntHex(binfo->vram, binfo->scrnx, 0, 90, 7, data);
     //putfonts8_asc(binfo->vram, binfo->scrnx, 160, 0, 7, s);
     //printaaa(binfo->vram, binfo->scrnx, 20, 100, 7,"Mouse  %s" ,"Here");
     

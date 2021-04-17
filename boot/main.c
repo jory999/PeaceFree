@@ -323,7 +323,7 @@ void SysMain()
 				i = fifo8_get(&mousefifo);
 				FunctionSti();
                 
-				printaaa(binfo->vram, binfo->scrnx, 10, 16, 7," %d" ,i);
+				//printaaa(binfo->vram, binfo->scrnx, 10, 16, 7," %d" ,i);
 
                 // Int2String(i, s);
 				//sprintf(s, "%02X", i);
@@ -332,11 +332,13 @@ void SysMain()
 
 				//sprintf(s, "%02X", i);
 				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 36, 47, 31);
-				//PutIntHex(binfo->vram, binfo->scrnx, 0, 36, 7, i);
+				PutIntHex(binfo->vram, binfo->scrnx, 0, 36, 7, i);
 				//putfonts8_asc(binfo->vram, binfo->scrnx, 32, 16, COL8_FFFFFF, s);
 			}
 		}
 	}
+
+
    //unsigned  char nowput[2][30]={{"GOD Will Bless My Family%s"} ,{"Amen"}};   
    
  
@@ -352,7 +354,7 @@ void SysMain()
   
    //int yy = 6/0; ////asdfghjkl
 
-    //while(1);
+    while(1);
 }
  
 #define PORT_KEYDAT				0x0060

@@ -1,7 +1,20 @@
-
+//#include <stdarg.h>
+//#include <stdio.h>
+//#include <stdlib.h>
 #include "font.h"
-//#include <stdio.h> 
+//#include <stdio.h>
 //#include <string.h>
+
+/* int sprintf(char* buf, const char *fmt, ...)
+{
+    va_list ap;
+    int ret;
+    va_start(ap, fmt);
+    ret = vsnprintf(buf, BUFSIZ, fmt, ap);
+    va_end(ap);
+    return ret;
+}
+ */
 extern unsigned char table_rgb[16 * 3];
 extern const char font_code_globalA[16];
 extern const char font_code_global[94][16];
@@ -227,7 +240,7 @@ void SysMain()
 {
    
 //    test();
-    char s[80], mcursor[256], keybuf[32], mousebuf[128];
+    char s[40], mcursor[256], keybuf[32], mousebuf[128];
    
 
     char *vram;
@@ -291,11 +304,11 @@ void SysMain()
 	init_mouse_cursor8(mcursor, COL8_008484);
 	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
 
-	printaaa(binfo->vram, binfo->scrnx, 0, 0, 7,"X=%d" ,mx);
-	printaaa(binfo->vram, binfo->scrnx, 110, 0, 7,"Y=%d" ,my);
+	//printaaa(binfo->vram, binfo->scrnx, 0, 0, 7,"X=%d" ,mx);
+	//printaaa(binfo->vram, binfo->scrnx, 110, 0, 7,"Y=%d" ,my);
 
 
-   enable_mouse();
+   //enable_mouse();
 
 	for (;;) {
 		//io_cli();
@@ -306,7 +319,9 @@ void SysMain()
 			if (fifo8_status(&keyfifo) != 0) {
 				i = fifo8_get(&keyfifo);
 				FunctionSti();
-				printaaa(binfo->vram, binfo->scrnx, 10, 60, 7,"%d" ,i);
+
+
+				printaaa(binfo->vram, binfo->scrnx, 10, 60, 7," %x" ,i);
                 
 				
 				//Int2String(i, s);
@@ -322,8 +337,9 @@ void SysMain()
 			} else if (fifo8_status(&mousefifo) != 0) {
 				i = fifo8_get(&mousefifo);
 				FunctionSti();
-                
-				//printaaa(binfo->vram, binfo->scrnx, 10, 16, 7," %d" ,i);
+
+				
+				printaaa(binfo->vram, binfo->scrnx, 10, 16, 7," %x" ,i);
 
                 // Int2String(i, s);
 				//sprintf(s, "%02X", i);
@@ -332,7 +348,7 @@ void SysMain()
 
 				//sprintf(s, "%02X", i);
 				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 36, 47, 31);
-				PutIntHex(binfo->vram, binfo->scrnx, 0, 36, 7, i);
+				//PutIntHex(binfo->vram, binfo->scrnx, 0, 36, 7, i);
 				//putfonts8_asc(binfo->vram, binfo->scrnx, 32, 16, COL8_FFFFFF, s);
 			}
 		}

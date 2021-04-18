@@ -262,11 +262,10 @@ int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, 
                         PutString(vram,xsize,x+8*i, y, color, p );
                         break;                    
                     case 'x':
-                        //a = va_arg(ap, int);
-                        PutString(vram,xsize,x, y, color, *format );
-                        PutIntHex(vram,xsize,x,y+10,color,format);
-                        PutIntHex(vram,xsize,x,y+20,color,&format);
-                        break;   
+                        
+                        a = va_arg(ap, int);
+                        PutIntHex(vram,xsize,x, y, color,a);
+                        break;          
                     
                     case 'd':
                         a = va_arg(ap, int);

@@ -19,6 +19,7 @@ extern unsigned char table_rgb[16 * 3];
 extern const char font_code_globalA[16];
 extern const char font_code_global[94][16];
 extern char cursor[16][16];
+extern char keys[0x53][2];
 
 extern FunctionHlt(void);
 extern void FunctionCli(void);
@@ -233,7 +234,15 @@ void test()
 //////////////////////////
 
 extern struct FIFO8 keyfifo, mousefifo;
-void enable_mouse(void);
+
+struct MOUSE_DEC {
+	unsigned char buf[3], phase;
+	int x, y, btn;
+};
+
+void enable_mouse(struct MOUSE_DEC *mdec);
+int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat);
+
 void init_keyboard(void);
  
 void SysMain()
@@ -254,6 +263,9 @@ void SysMain()
 
 	
 	int mx, my,i;
+
+	struct MOUSE_DEC mdec; 
+
 
    InitIDT();
    InitPIC();
@@ -294,7 +306,7 @@ void SysMain()
    FunctionOut8(0x0021, 0xf9); /* 开放PIC1和键盘中断(11111001) */
    FunctionOut8(0x00a1, 0xef); /* 开放鼠标中断(11101111) */
 
-   init_keyboard();
+   
 
     InitPalette();
     init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
@@ -304,13 +316,89 @@ void SysMain()
 	init_mouse_cursor8(mcursor, COL8_008484);
 	putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);
 
+	//putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx+30, my+10, mcursor, 16);
+	//boxfill8(binfo->vram, binfo->scrnx, COL8_008484, mx, my, mx + 15, my + 15); /* 隐藏鼠标 */
+
 	//printaaa(binfo->vram, binfo->scrnx, 0, 0, 7,"X=%d" ,mx);
 	//printaaa(binfo->vram, binfo->scrnx, 110, 0, 7,"Y=%d" ,my);
 
 
    //enable_mouse();
+   
+   init_keyboard();
+   enable_mouse(&mdec);
 
 	for (;;) {
+		FunctionCli();
+		if (fifo8_status(&keyfifo) + fifo8_status(&mousefifo) == 0) {
+			FunctionStihlt();
+		} else {
+			if (fifo8_status(&keyfifo) != 0) {
+				i = fifo8_get(&keyfifo);
+
+				printaaa(binfo->vram, binfo->scrnx, 20, 80, 7,"GOD Will Bless My Family  %s" ,"Amen");
+				FunctionSti();
+               
+				
+				//sprintf(s, "%02X", i);
+				printaaa(binfo->vram, binfo->scrnx, 10, 30, 7,"sssaaabbb%c" ,keys[i-1][0x0]);
+				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484,  0, 16, 15, 31);
+				//putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
+			} else if (fifo8_status(&mousefifo) != 0) {
+				i = fifo8_get(&mousefifo);
+				
+				FunctionSti();
+				//printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %x" ,i);
+				//putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 20, 60, mcursor, 16);
+				/* if (mouse_decode(&mdec, i) != 0) {
+					 // 3字节都凑齐了，所以把它们显示出来
+					//sprintf(s, "[lcr %4d %4d]", mdec.x, mdec.y);
+					//printaaa(binfo->vram, binfo->scrnx, 10, 50, 7,"sssaaabbb%x" , mdec.x);
+					//printaaa(binfo->vram, binfo->scrnx, 10, 60, 7,"sssaaabbb%x" , mdec.y);
+					if ((mdec.btn & 0x01) != 0) {
+						s[1] = 'L';
+					}
+					if ((mdec.btn & 0x02) != 0) {
+						s[3] = 'R';
+					}
+					if ((mdec.btn & 0x04) != 0) {
+						s[2] = 'C';
+					}
+					//boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 32, 16, 32 + 15 * 8 - 1, 31);
+					//putfonts8_asc(binfo->vram, binfo->scrnx, 32, 16, COL8_FFFFFF, s);
+					// 鼠标指针的移动 
+					boxfill8(binfo->vram, binfo->scrnx, COL8_008484, mx, my, mx + 15, my + 15); // 隐藏鼠标 
+					mx += mdec.x;
+					my += mdec.y;
+					if (mx < 0) {
+						mx = 0;
+					}
+					if (my < 0) {
+						my = 0;
+					}
+					if (mx > binfo->scrnx - 16) {
+						mx = binfo->scrnx - 16;
+					}
+					if (my > binfo->scrny - 16) {
+						my = binfo->scrny - 16;
+					}
+					//sprintf(s, "(%3d, %3d)", mx, my);
+					//printaaa(binfo->vram, binfo->scrnx, 10, 50, 7,"sssaaabbb%x" , mx);
+					//printaaa(binfo->vram, binfo->scrnx, 10, 60, 7,"sssaaabbb%x" , my);
+
+					printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
+					boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 0, 79, 15); // 隐藏坐标 
+					//putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, s); // 显示坐标 
+					putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);  描画鼠标 
+					putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 20, 60, mcursor, 16);
+				} */
+			}
+		}
+	}
+
+   //InitMouse();
+
+	/* for (;;) {
 		//io_cli();
 		FunctionCli();
 		if (fifo8_status(&keyfifo) + fifo8_status(&mousefifo) == 0) {
@@ -320,8 +408,8 @@ void SysMain()
 				i = fifo8_get(&keyfifo);
 				FunctionSti();
 
-
-				printaaa(binfo->vram, binfo->scrnx, 10, 60, 7," %x" ,i);
+                //boxfill8(binfo->vram, binfo->scrnx, COL8_008484,  0, 16, 15, 31);
+				printaaa(binfo->vram, binfo->scrnx, 10, 60, 7,"sssaaabbb%x" ,i);
                 
 				
 				//Int2String(i, s);
@@ -339,7 +427,7 @@ void SysMain()
 				FunctionSti();
 
 				
-				printaaa(binfo->vram, binfo->scrnx, 10, 16, 7," %x" ,i);
+				//printaaa(binfo->vram, binfo->scrnx, 10, 16, 9," %x" ,i);
 
                 // Int2String(i, s);
 				//sprintf(s, "%02X", i);
@@ -352,7 +440,7 @@ void SysMain()
 				//putfonts8_asc(binfo->vram, binfo->scrnx, 32, 16, COL8_FFFFFF, s);
 			}
 		}
-	}
+	} */
 
 
    //unsigned  char nowput[2][30]={{"GOD Will Bless My Family%s"} ,{"Amen"}};   
@@ -370,7 +458,7 @@ void SysMain()
   
    //int yy = 6/0; ////asdfghjkl
 
-    while(1);
+   // while(1);
 }
  
 #define PORT_KEYDAT				0x0060
@@ -404,14 +492,89 @@ void init_keyboard(void)
 #define KEYCMD_SENDTO_MOUSE		0xd4
 #define MOUSECMD_ENABLE			0xf4
 
-void enable_mouse(void)
+/* void enable_mouse(void)
 {
-	/* 激活鼠标 */
+	// 激活鼠标 
 	wait_KBC_sendready();
 	FunctionOut8(PORT_KEYCMD, KEYCMD_SENDTO_MOUSE);
 	wait_KBC_sendready();
 	FunctionOut8(PORT_KEYDAT, MOUSECMD_ENABLE);
-	return; /* 顺利的话，键盘控制器会返回ACK(0xfa) */
+	return; 
+	// 顺利的话，键盘控制器会返回ACK(0xfa) 
+
+	
+} */
+void enable_mouse(struct MOUSE_DEC *mdec){
+	/* 鼠标有效 */
+	wait_KBC_sendready();
+	FunctionOut8(PORT_KEYCMD, KEYCMD_SENDTO_MOUSE);
+	wait_KBC_sendready();
+	FunctionOut8(PORT_KEYDAT, MOUSECMD_ENABLE);
+	/* 顺利的话，ACK(0xfa)会被送过来 */
+	mdec->phase = 0; /* 等待0xfa的阶段 */    
+	return;
+}
+int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat){
+	struct BOOTINFO *binfo;
+
+    binfo = (struct BOOTINFO * ) 0x0ff0;
+	
+	if (mdec->phase == 0) {
+		/* 等待鼠标的0xfa的阶段 */
+		if (dat == 0xfa) {
+			mdec->phase = 1;
+			printaaa(binfo->vram, binfo->scrnx, 20, 50, 7,"GOD Will Bless My Family  %d" ,1);
+		}        
+		return 0;
+	}
+	if (mdec->phase == 1) {
+		/* 等待鼠标第一字节的阶段 */
+		mdec->buf[0] = dat;
+		mdec->phase = 2;
+		printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %d" ,2);
+		return 0;
+	}
+	if (mdec->phase == 2) {
+		/* 等待鼠标第二字节的阶段 */
+		mdec->buf[1] = dat;
+		mdec->phase = 3;
+		printaaa(binfo->vram, binfo->scrnx, 20, 70, 7,"GOD Will Bless My Family  %d" ,3);
+		return 0;
+	}
+	if (mdec->phase == 3) {
+		/* 等待鼠标第二字节的阶段 */
+		mdec->buf[2] = dat;
+		mdec->phase = 1;
+		mdec->btn = mdec->buf[0] & 0x07;
+		mdec->x = mdec->buf[1];
+		mdec->y = mdec->buf[2];
+		if ((mdec->buf[0] & 0x10) != 0) {
+			mdec->x |= 0xffffff00;
+		}
+		if ((mdec->buf[0] & 0x20) != 0) {
+			mdec->y |= 0xffffff00;
+		}     
+		/* 鼠标的y方向与画面符号相反 */   
+		mdec->y = - mdec->y; 
+		printaaa(binfo->vram, binfo->scrnx, 20, 80, 7,"GOD Will Bless My Family  %d" ,4);
+		return 1;
+	}
+	/* 应该不可能到这里来 */
+	return -1; 
+}
+void InitMouse()
+{
+    // 对 8042 键盘控制芯片进行编程 
+    // 允许 鼠标 接口
+    FunctionOut8( 0x64 , 0xa8 ) ;
+    // 通知 8042 下个字节的发向 0x60 的数据将发给 鼠标
+    FunctionOut8( 0x64 , 0xd4 ) ;
+    // 允许 鼠标 发数据
+    FunctionOut8( 0x60 , 0xf4 ) ;
+    // 通知 8042,下个字节的发向 0x60 的数据应放向 8042 的命令寄存器
+    FunctionOut8( 0x64 , 0x60 ) ;
+    // 许可键盘及 鼠标 接口及中断
+    FunctionOut8( 0x60 , 0x47 ) ;
 }
 
 void set_palette(int start, int end, unsigned char *rgb);

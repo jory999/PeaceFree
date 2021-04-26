@@ -264,7 +264,7 @@ int printaaa(char *vram, int xsize,int x, int y, int color, const char *format, 
                     case 'x':
                         
                         a = va_arg(ap, int);
-                        PutIntHex(vram,xsize,x, y, color,a);
+                        PutIntHex(vram,xsize,x+8*i, y, color,a);
                         break;          
                     
                     case 'd':

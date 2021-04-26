@@ -396,7 +396,16 @@ struct FIFO8 keyfifo;
  void inthandler21(int *esp)
 /* 来自PS/2键盘的中断 */
 {
-	
+	struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+	unsigned char data, s[4];
+	FunctionOut8(PIC0_OCW2, 0x61);	/* 通知PIC IRQ-01 已经受理完毕 */
+	data = FuntionIn8(PORT_KEYDAT);
+	fifo8_put(&keyfifo, data);
+
+     
+    
+    //printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %c" ,keys[data-1][0x0]);
+	return;
 
     //    //struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
 	//unsigned char data, s[4];
@@ -410,7 +419,7 @@ struct FIFO8 keyfifo;
         
         //putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, s);
 	//return;
-
+/* 
     ////////////////////////////////////
  //取得扫描码
         struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
@@ -423,7 +432,7 @@ struct FIFO8 keyfifo;
     static unsigned char word_x=0;
     word_x++;
     //printf(0,word_x*16,0xffffff,"sao miao ma:%x",scan_code);
-    printaaa(binfo->vram, binfo->scrnx, 0, word_x*16, 7,"sao miao ma:%x",scan_code);
+    printaaa(binfo->vram, binfo->scrnx, 10, word_x*16, 7,"Scan code:%x",scan_code);
         if ((key_ind == KEY_LEFT_SHIFT || key_ind == KEY_RIGHT_SHIFT) && ((scan_code & 0x80) == 0x00))//按键的最高位，0为按下，1为抬起
         {
                 kb_key_shift = 0x1;
@@ -447,7 +456,7 @@ struct FIFO8 keyfifo;
         FunctionOut8(scan_code & 0x7f, 0x61);
         //通知PIC可以接受新中断
         FunctionOut8(0x20, 0x20);
-
+////////////////////////////////////////////////////// */
 
 }
 
@@ -455,7 +464,14 @@ struct FIFO8 mousefifo;
 void inthandler2c(int *esp)
 /* 来自PS/2鼠标的中断 */
 {
-	/* struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+	unsigned char data;
+	FunctionOut8(PIC1_OCW2, 0x64);	/* 通知PIC IRQ-12 已经受理完毕 */
+	FunctionOut8(PIC0_OCW2, 0x62);	/* 通知PIC IRQ-02 已经受理完毕 */
+	data = FuntionIn8(PORT_KEYDAT);
+	fifo8_put(&mousefifo, data);
+	return;
+    
+    /* struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
 	boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
      unsigned  char nowput92[66]="IINT 2C (IRQ-12) : PS/2 mouse";
 	putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, 7, nowput92);
@@ -463,17 +479,30 @@ void inthandler2c(int *esp)
 		FunctionHlt();
 	} */
     //struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
-    unsigned char data,s[10];
-	FunctionOut8(PIC1_OCW2, 0x64);	/* 通知PIC IRQ-12 已经受理完毕 */
-	FunctionOut8(PIC0_OCW2, 0x62);	/* 通知PIC IRQ-02 已经受理完毕 */
-	data = FuntionIn8(PORT_KEYDAT);
-	fifo8_put(&mousefifo, data);
+//   unsigned char data,s[10];
+//	FunctionOut8(PIC1_OCW2, 0x64);	/* 通知PIC IRQ-12 已经受理完毕 */
+//	FunctionOut8(PIC0_OCW2, 0x62);	/* 通知PIC IRQ-02 已经受理完毕 */
+//	data = FuntionIn8(PORT_KEYDAT);
+//	fifo8_put(&mousefifo, data); 
 
     //Int2String(data, s);
     //boxfill8(binfo->vram, binfo->scrnx, 0, 0, 0, 32 * 8 - 1, 15);
     //PutIntHex(binfo->vram, binfo->scrnx, 0, 90, 7, data);
     //putfonts8_asc(binfo->vram, binfo->scrnx, 160, 0, 7, s);
     //printaaa(binfo->vram, binfo->scrnx, 20, 100, 7,"Mouse  %s" ,"Here");
+
+/* //////////////////////////////
+ struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+     static int a=0;
+    unsigned char scan_code = FuntionIn8(0x60);
+    a++;
+    //printf(0,0,0xff0000,"mouse!!!!!:%d",a);
+    printaaa(binfo->vram, binfo->scrnx, 10, 20, 7,"mouse:%d",a);
+        //通知PIC1可以接受新中断
+    FunctionOut8(0xa0, 0x64);
+        //通知PIC0可以接受新中断
+    FunctionOut8(0x20, 0x62);
+////////////////////////////////////////// */
     
 	return;
 }

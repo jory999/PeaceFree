@@ -402,9 +402,18 @@ struct FIFO8 keyfifo;
 	data = FuntionIn8(PORT_KEYDAT);
 	fifo8_put(&keyfifo, data);
 
-     
-    
-    //printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %c" ,keys[data-1][0x0]);
+     static unsigned char word_x=0;
+
+    boxfill8(binfo->vram, binfo->scrnx, 9, 0, 0, 300, 30); 
+    printaaa(binfo->vram, binfo->scrnx, 10, word_x*16, 7,"si%d" ,keyfifo.size );
+    printaaa(binfo->vram, binfo->scrnx, 50, word_x*16, 7,"fr%d" ,keyfifo.free );
+    printaaa(binfo->vram, binfo->scrnx, 90, word_x*16, 7,"p%d" ,keyfifo.p );
+    printaaa(binfo->vram, binfo->scrnx, 120, word_x*16, 7,"buf%x" ,fifo8_get(&keyfifo) );
+
+    //清除键盘状态可以接受新按键，不清除shift位置
+        //FunctionOut8(data & 0x7f, 0x61);
+        //通知PIC可以接受新中断
+        //FunctionOut8(0x20, 0x20);
 	return;
 
     //    //struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;

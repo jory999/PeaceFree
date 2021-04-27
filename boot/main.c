@@ -233,7 +233,8 @@ void test()
 
 //////////////////////////
 
-extern struct FIFO8 keyfifo, mousefifo;
+extern struct FIFO8 keyfifo; 
+extern struct FIFO8 mousefifo;
 
 struct MOUSE_DEC {
 	unsigned char buf[3], phase;
@@ -301,12 +302,15 @@ void SysMain()
 	
   
 
-   fifo8_init(&keyfifo, 32, keybuf);
-   fifo8_init(&mousefifo, 128, mousebuf);
+   
+
    FunctionOut8(0x0021, 0xf9); /* 开放PIC1和键盘中断(11111001) */
    FunctionOut8(0x00a1, 0xef); /* 开放鼠标中断(11101111) */
 
-   
+   fifo8_init(&keyfifo, 32, keybuf);
+   fifo8_init(&mousefifo, 128, mousebuf);
+
+   init_keyboard();
 
     InitPalette();
     init_screen(binfo->vram, binfo->scrnx, binfo->scrny);
@@ -320,12 +324,12 @@ void SysMain()
 	//boxfill8(binfo->vram, binfo->scrnx, COL8_008484, mx, my, mx + 15, my + 15); /* 隐藏鼠标 */
 
 	//printaaa(binfo->vram, binfo->scrnx, 0, 0, 7,"X=%d" ,mx);
-	//printaaa(binfo->vram, binfo->scrnx, 110, 0, 7,"Y=%d" ,my);
+	//printaaa(binfo->vram, binfo->scrnx, 60, 0, 7,"Y=%d" ,my);
 
 
    //enable_mouse();
    
-   init_keyboard();
+   
    enable_mouse(&mdec);
 
 	for (;;) {
@@ -336,21 +340,21 @@ void SysMain()
 			if (fifo8_status(&keyfifo) != 0) {
 				i = fifo8_get(&keyfifo);
 
-				printaaa(binfo->vram, binfo->scrnx, 20, 80, 7,"GOD Will Bless My Family  %s" ,"Amen");
+				printaaa(binfo->vram, binfo->scrnx, 20, 100, 7,"GOD Will Bless My Family  %s" ,"AmenKey");
 				FunctionSti();
                
 				
 				//sprintf(s, "%02X", i);
-				printaaa(binfo->vram, binfo->scrnx, 10, 30, 7,"sssaaabbb%c" ,keys[i-1][0x0]);
+				//printaaa(binfo->vram, binfo->scrnx, 10, 50, 7,"sssaaabbb%c" ,keys[i-1][0x0]);
 				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484,  0, 16, 15, 31);
 				//putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
 			} else if (fifo8_status(&mousefifo) != 0) {
 				i = fifo8_get(&mousefifo);
-				
+				printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
 				FunctionSti();
 				//printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %x" ,i);
 				//putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 20, 60, mcursor, 16);
-				/* if (mouse_decode(&mdec, i) != 0) {
+				if (mouse_decode(&mdec, i) != 0) {
 					 // 3字节都凑齐了，所以把它们显示出来
 					//sprintf(s, "[lcr %4d %4d]", mdec.x, mdec.y);
 					//printaaa(binfo->vram, binfo->scrnx, 10, 50, 7,"sssaaabbb%x" , mdec.x);
@@ -389,9 +393,9 @@ void SysMain()
 					printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
 					boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 0, 79, 15); // 隐藏坐标 
 					//putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, s); // 显示坐标 
-					putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);  描画鼠标 
+					putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);  //描画鼠标 
 					putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 20, 60, mcursor, 16);
-				} */
+				}
 			}
 		}
 	}

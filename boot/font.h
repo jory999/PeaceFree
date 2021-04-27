@@ -18,11 +18,14 @@ struct FIFO8 {
 	int p, q, size, free, flags;
 };
 
+ //struct FIFO8 keyfifo;
+ //struct FIFO8 mousefifo;
+
 #define PIC0_ICW1		0x0020
 #define PIC0_OCW2		0x0020
 #define PIC0_IMR		0x0021
 #define PIC0_ICW2		0x0021
-#define PIC0_ICW3		0x0021
+#define PIC0_ICW3		0x0021s
 #define PIC0_ICW4		0x0021
 #define PIC1_ICW1		0x00a0
 #define PIC1_OCW2		0x00a0
@@ -30,6 +33,9 @@ struct FIFO8 {
 #define PIC1_ICW2		0x00a1
 #define PIC1_ICW3		0x00a1
 #define PIC1_ICW4		0x00a1
+
+
+
 void fifo8_init(struct FIFO8 *fifo, int size, unsigned char *buf);
 int fifo8_put(struct FIFO8 *fifo, unsigned char data);
 int fifo8_get(struct FIFO8 *fifo);

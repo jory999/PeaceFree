@@ -233,8 +233,11 @@ void test()
 
 //////////////////////////
 
-extern struct FIFO8 keyfifo; 
-extern struct FIFO8 mousefifo;
+//extern struct FIFO8 keyfifo; 
+//extern struct FIFO8 mousefifo;
+
+struct FIFO8 keyfifo;
+struct FIFO8 mousefifo;
 
 struct MOUSE_DEC {
 	unsigned char buf[3], phase;
@@ -339,18 +342,26 @@ void SysMain()
 		} else {
 			if (fifo8_status(&keyfifo) != 0) {
 				i = fifo8_get(&keyfifo);
-
+                //boxfill8(binfo->vram, binfo->scrnx, 9, 0, 100, 320, 20); 
 				printaaa(binfo->vram, binfo->scrnx, 20, 100, 7,"GOD Will Bless My Family  %s" ,"AmenKey");
 				FunctionSti();
-               
-				
+                //printaaa(binfo->vram, binfo->scrnx, 20, 100, 7,"GOD Will Bless My Family  %s" ,"AmenKey");
+				//boxfill8(binfo->vram, binfo->scrnx, 9, 0, 100, 320, 150); 
 				//sprintf(s, "%02X", i);
 				//printaaa(binfo->vram, binfo->scrnx, 10, 50, 7,"sssaaabbb%c" ,keys[i-1][0x0]);
 				//boxfill8(binfo->vram, binfo->scrnx, COL8_008484,  0, 16, 15, 31);
 				//putfonts8_asc(binfo->vram, binfo->scrnx, 0, 16, COL8_FFFFFF, s);
 			} else if (fifo8_status(&mousefifo) != 0) {
-				i = fifo8_get(&mousefifo);
-				printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
+				//i = fifo8_get(&mousefifo);
+				//boxfill8(binfo->vram, binfo->scrnx, 9, 0, 60, 320, 80); 
+				printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amenmouse");
+
+				/* boxfill8(binfo->vram, binfo->scrnx, 9, 0, 120, 320, 150); 
+                printaaa(binfo->vram, binfo->scrnx, 10, 120, 7,"si%d" ,mousefifo.size );
+                printaaa(binfo->vram, binfo->scrnx, 50, 120, 7,"fr%d" ,mousefifo.free );
+                printaaa(binfo->vram, binfo->scrnx, 90, 120, 7,"q%d" ,mousefifo.q );
+                printaaa(binfo->vram, binfo->scrnx, 120, 120, 7,"buf%x" ,i ); */
+				
 				FunctionSti();
 				//printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %x" ,i);
 				//putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 20, 60, mcursor, 16);
@@ -390,11 +401,11 @@ void SysMain()
 					//printaaa(binfo->vram, binfo->scrnx, 10, 50, 7,"sssaaabbb%x" , mx);
 					//printaaa(binfo->vram, binfo->scrnx, 10, 60, 7,"sssaaabbb%x" , my);
 
-					printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %s" ,"Amen");
+					printaaa(binfo->vram, binfo->scrnx, 20, 70, 7,"GOD Will Bless My Family  %s" ,"Amen2");
 					boxfill8(binfo->vram, binfo->scrnx, COL8_008484, 0, 0, 79, 15); // 隐藏坐标 
 					//putfonts8_asc(binfo->vram, binfo->scrnx, 0, 0, COL8_FFFFFF, s); // 显示坐标 
 					putblock8_8(binfo->vram, binfo->scrnx, 16, 16, mx, my, mcursor, 16);  //描画鼠标 
-					putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 20, 60, mcursor, 16);
+					//putblock8_8(binfo->vram, binfo->scrnx, 16, 16, 20, 60, mcursor, 16);
 				}
 			}
 		}
@@ -535,14 +546,14 @@ int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat){
 		/* 等待鼠标第一字节的阶段 */
 		mdec->buf[0] = dat;
 		mdec->phase = 2;
-		printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %d" ,2);
+		//printaaa(binfo->vram, binfo->scrnx, 20, 60, 7,"GOD Will Bless My Family  %d" ,2);
 		return 0;
 	}
 	if (mdec->phase == 2) {
 		/* 等待鼠标第二字节的阶段 */
 		mdec->buf[1] = dat;
 		mdec->phase = 3;
-		printaaa(binfo->vram, binfo->scrnx, 20, 70, 7,"GOD Will Bless My Family  %d" ,3);
+		//printaaa(binfo->vram, binfo->scrnx, 20, 70, 7,"GOD Will Bless My Family  %d" ,3);
 		return 0;
 	}
 	if (mdec->phase == 3) {
@@ -560,7 +571,7 @@ int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat){
 		}     
 		/* 鼠标的y方向与画面符号相反 */   
 		mdec->y = - mdec->y; 
-		printaaa(binfo->vram, binfo->scrnx, 20, 80, 7,"GOD Will Bless My Family  %d" ,4);
+		//printaaa(binfo->vram, binfo->scrnx, 20, 80, 7,"GOD Will Bless My Family  %d" ,4);
 		return 1;
 	}
 	/* 应该不可能到这里来 */

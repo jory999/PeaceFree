@@ -391,7 +391,10 @@ int fifo8_status(struct FIFO8 *fifo)
 
 #define PORT_KEYDAT		0x0060
 
-struct FIFO8 keyfifo;
+//struct FIFO8 keyfifo;
+
+extern struct FIFO8 keyfifo; 
+
 
  void inthandler21(int *esp)
 /* 来自PS/2键盘的中断 */
@@ -402,13 +405,13 @@ struct FIFO8 keyfifo;
 	data = FuntionIn8(PORT_KEYDAT);
 	fifo8_put(&keyfifo, data);
 
-     static unsigned char word_x=0;
+    /*  static unsigned char word_x=0;
 
-    boxfill8(binfo->vram, binfo->scrnx, 9, 0, 0, 300, 30); 
+    boxfill8(binfo->vram, binfo->scrnx, 9, 0, 0, 320, 20); 
     printaaa(binfo->vram, binfo->scrnx, 10, word_x*16, 7,"si%d" ,keyfifo.size );
     printaaa(binfo->vram, binfo->scrnx, 50, word_x*16, 7,"fr%d" ,keyfifo.free );
-    printaaa(binfo->vram, binfo->scrnx, 90, word_x*16, 7,"p%d" ,keyfifo.p );
-    printaaa(binfo->vram, binfo->scrnx, 120, word_x*16, 7,"buf%x" ,fifo8_get(&keyfifo) );
+    printaaa(binfo->vram, binfo->scrnx, 90, word_x*16, 7,"q%d" ,keyfifo.q );
+    printaaa(binfo->vram, binfo->scrnx, 120, word_x*16, 7,"buf%x" ,fifo8_get(&keyfifo)  ); */
 
     //清除键盘状态可以接受新按键，不清除shift位置
         //FunctionOut8(data & 0x7f, 0x61);
@@ -469,7 +472,10 @@ struct FIFO8 keyfifo;
 
 }
 
-struct FIFO8 mousefifo;
+//struct FIFO8 mousefifo;
+
+
+extern struct FIFO8 mousefifo;
 void inthandler2c(int *esp)
 /* 来自PS/2鼠标的中断 */
 {
@@ -478,6 +484,14 @@ void inthandler2c(int *esp)
 	FunctionOut8(PIC0_OCW2, 0x62);	/* 通知PIC IRQ-02 已经受理完毕 */
 	data = FuntionIn8(PORT_KEYDAT);
 	fifo8_put(&mousefifo, data);
+
+
+    struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
+    boxfill8(binfo->vram, binfo->scrnx, 9, 0, 120, 320, 150); 
+    printaaa(binfo->vram, binfo->scrnx, 10, 120, 7,"si%d" ,mousefifo.size );
+    printaaa(binfo->vram, binfo->scrnx, 50, 120, 7,"fr%d" ,mousefifo.free );
+    printaaa(binfo->vram, binfo->scrnx, 90, 120, 7,"q%d" ,mousefifo.q );
+    printaaa(binfo->vram, binfo->scrnx, 120, 120, 7,"buf%x" ,fifo8_get(&mousefifo) );
 	return;
     
     /* struct BOOTINFO1 *binfo = (struct BOOTINFO *) 0x0ff0;
